@@ -34,4 +34,19 @@ public class ObjectOnMap {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof ObjectOnMap)) {
+            return false;
+        }
+
+        ObjectOnMap objectOnMap = (ObjectOnMap) o;
+        return (objectOnMap.id == this.id && objectOnMap.name.equals(this.name) && objectOnMap.coordinate.equals(this.coordinate));
+    }
 }

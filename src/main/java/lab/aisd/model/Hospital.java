@@ -54,4 +54,20 @@ public class Hospital {
     public void setFreeBedsCount(int freeBedsCount) {
         this.freeBedsCount = freeBedsCount;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Hospital)) {
+            return false;
+        }
+
+        Hospital hospital = (Hospital) o;
+        return (hospital.id == this.id && hospital.name.equals(this.name) && hospital.coordinate.equals(this.coordinate)
+                && hospital.bedsCount == this.bedsCount && hospital.freeBedsCount == this.freeBedsCount);
+    }
 }

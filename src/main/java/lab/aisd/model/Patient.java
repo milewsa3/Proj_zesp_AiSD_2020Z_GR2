@@ -24,4 +24,19 @@ public class Patient {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Patient)) {
+            return false;
+        }
+
+        Patient patient = (Patient) o;
+        return (patient.id == this.id && patient.coordinate.equals(this.coordinate));
+    }
 }

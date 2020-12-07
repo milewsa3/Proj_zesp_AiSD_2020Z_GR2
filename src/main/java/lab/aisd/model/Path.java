@@ -44,4 +44,20 @@ public class Path {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Path)) {
+            return false;
+        }
+
+        Path path = (Path) o;
+        return (path.id == this.id && path.firstHospitalID == this.firstHospitalID
+                && path.secondHospitalID == this.secondHospitalID && path.distance == this.distance);
+    }
 }
