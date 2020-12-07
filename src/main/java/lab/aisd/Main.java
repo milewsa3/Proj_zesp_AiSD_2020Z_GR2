@@ -30,6 +30,6 @@ public class Main extends Application {
     }
 
     protected void playBackgroundMusic() {
-        new Thread(() -> MusicPlayer.getInstance().play("/music/Ambulance_bg.wav", 0.2)).start();
+        new Thread(() -> MusicPlayer.getInstance().play("/music/Ambulance_bg.wav", 0.1)).start();
     }
 }

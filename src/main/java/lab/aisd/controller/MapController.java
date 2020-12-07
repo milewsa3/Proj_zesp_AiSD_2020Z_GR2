@@ -77,9 +77,8 @@ public class MapController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        StageManager.getInstance().setResizable(true);
         initSlider();
-
-
     }
 
     private void initSlider() {
