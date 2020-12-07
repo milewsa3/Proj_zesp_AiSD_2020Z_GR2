@@ -61,4 +61,8 @@ public class MusicPlayer {
     public void setVolume(double value) {
         mediaPlayer.setVolume(value);
     }
+
+    public double getVolume() {
+        return mediaPlayer.getVolume();
+    }
 }

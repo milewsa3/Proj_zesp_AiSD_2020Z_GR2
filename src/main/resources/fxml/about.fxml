@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.aisd.controller.AboutController">
+   <children>
+      <Label layoutX="200.0" layoutY="64.0" text="Copyright (c) 2020 Karetki z.o.o" />
+      <Button fx:id="closeBt" layoutX="337.0" layoutY="261.0" mnemonicParsing="false" onAction="#exit" text="Close" />
+      <TextArea editable="false" layoutX="16.0" layoutY="112.0" prefHeight="131.0" prefWidth="368.0" text="Karetki w pogotowiu is a software that helps people in leading their ways to the better future. If you thought that nobody and nothing could change your situation, now you are probably looking at the program and realising that you were in a big mistake." wrapText="true" />
+      <ImageView fitHeight="85.0" fitWidth="166.0" layoutX="16.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asset/icon.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

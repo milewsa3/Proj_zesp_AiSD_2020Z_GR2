@@ -25,6 +25,17 @@ public enum FxmlView {
         public String getFxmlFile() {
             return "map.fxml";
         }
+    },
+    ABOUT {
+        @Override
+        public String getTitle() {
+            return "About";
+        }
+
+        @Override
+        public String getFxmlFile() {
+            return "about.fxml";
+        }
     };
 
 
