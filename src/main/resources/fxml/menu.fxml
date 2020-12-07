@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.aisd.controller.MenuController">
+   <children>
+      <ImageView fitHeight="500.0" fitWidth="1000.0" pickOnBounds="true">
+         <image>
+            <Image url="@../asset/bg_main.jpg" />
+         </image>
+      </ImageView>
+      <VBox layoutX="-3.0" maxHeight="500.0" maxWidth="1000.0" minHeight="200.0" minWidth="500.0" prefHeight="500.0" prefWidth="1000.0" spacing="150.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="100.0" prefWidth="705.0" text="Karetki w pogotowiu">
+                     <font>
+                        <Font name="Arial" size="78.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="150.0">
+               <children>
+                  <Button fx:id="startBt" mnemonicParsing="false" onAction="#start" prefHeight="65.0" prefWidth="200.0" text="START" textFill="#b50000">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="exitBt" mnemonicParsing="false" onAction="#exit" prefHeight="63.0" prefWidth="201.0" text="EXIT">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="100.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

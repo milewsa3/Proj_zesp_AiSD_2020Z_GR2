@@ -4,26 +4,26 @@ import java.util.ResourceBundle;
 
 public enum FxmlView {
 
-    MAIN {
+    MENU {
         @Override
         public String getTitle() {
-            return "Main";
+            return "Menu";
         }
 
         @Override
         public String getFxmlFile() {
-            return "main.fxml";
+            return "menu.fxml";
         }
     },
-    ADD {
+    MAP {
         @Override
         public String getTitle() {
-            return "Add";
+            return "Map";
         }
 
         @Override
         public String getFxmlFile() {
-            return "add.fxml";
+            return "map.fxml";
         }
     };
 

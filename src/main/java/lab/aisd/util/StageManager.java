@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lab.aisd.Main;
@@ -15,15 +16,29 @@ import java.util.Objects;
  * Manages switching Scenes on the Primary Stage
  */
 public class StageManager {
+    private static StageManager instance;
 
     private final Stage primaryStage;
 
-    public StageManager(Stage stage) {
+    private StageManager(Stage stage) {
         this.primaryStage = stage;
+    }
+
+    public static void initInstance(Stage stage) {
+        if (instance == null)
+            instance = new StageManager(stage);
+    }
+
+    public static StageManager getInstance() {
+        return instance;
     }
 
     public void showAlertScene(final FxmlView view, String title, String description) {
         //to implement
+    }
+
+    public void setResizable(boolean value) {
+        primaryStage.setResizable(value);
     }
 
     public void openNewScene(final FxmlView view) {
@@ -91,4 +106,11 @@ public class StageManager {
         Platform.exit();
     }
 
+    public void setIcon(String relativePath) {
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream(relativePath)));
+    }
+
+    public Stage getStage() {
+        return primaryStage;
+    }
 }
