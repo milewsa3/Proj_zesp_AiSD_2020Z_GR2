@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InputData {
-    private List<Hospital> hospitals;
-    private List<ObjectOnMap> objectsOnMap;
-    private List<Path> paths;
+    private final List<Hospital> hospitals;
+    private final List<ObjectOnMap> objectsOnMap;
+    private final List<Path> paths;
 
     public InputData() {
         hospitals = new ArrayList<>();
@@ -22,24 +22,11 @@ public class InputData {
         return hospitals;
     }
 
-    public void setHospitals(List<Hospital> hospitals) {
-        this.hospitals = hospitals;
-    }
-
     public List<ObjectOnMap> getObjectsOnMap() {
         return objectsOnMap;
-    }
-
-    public void setObjectsOnMap(List<ObjectOnMap> objectsOnMap) {
-        this.objectsOnMap = objectsOnMap;
     }
 
     public List<Path> getPaths() {
         return paths;
     }
-
-    public void setPaths(List<Path> paths) {
-        this.paths = paths;
-    }
-
 }

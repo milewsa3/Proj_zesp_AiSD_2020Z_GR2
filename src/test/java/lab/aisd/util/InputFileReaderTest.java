@@ -3,6 +3,7 @@ package lab.aisd.util;
 import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
 import lab.aisd.util.input.InputFileReader;
+import lab.aisd.util.input.InvalidFileFormatException;
 import org.junit.Test;
 
 import java.io.Reader;
@@ -74,7 +75,7 @@ public class InputFileReaderTest {
         assertEquals(paths, inputData.getPaths());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = InvalidFileFormatException.class)
     public void readMainFileWithIncorrectId() throws Exception {
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "abcdefghij | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
@@ -100,7 +101,7 @@ public class InputFileReaderTest {
         inputFileReader.saveMainFileData(reader);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = InvalidFileFormatException.class)
     public void readMainFileWithIncorrectHeaderCount() throws Exception {
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "1 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
@@ -118,7 +119,7 @@ public class InputFileReaderTest {
         inputFileReader.saveMainFileData(reader);
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = InvalidFileFormatException.class)
     public void readMainFileWithIdOutOfBounds() throws Exception {
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "10000000000000000000000000000000000000000000000000000000000000000000 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
