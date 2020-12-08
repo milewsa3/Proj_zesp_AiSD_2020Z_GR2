@@ -4,7 +4,7 @@ import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
 import lab.aisd.util.input.InputFileReader;
 import lab.aisd.util.input.InvalidFileFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class InputFileReaderTest {
     @Test
@@ -75,7 +77,7 @@ public class InputFileReaderTest {
         assertEquals(paths, inputData.getPaths());
     }
 
-    @Test(expected = InvalidFileFormatException.class)
+    @Test
     public void readMainFileWithIncorrectId() throws Exception {
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "abcdefghij | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
@@ -97,11 +99,13 @@ public class InputFileReaderTest {
                 "5 | 2 | 4 | 550\n" +
                 "6 | 3 | 5 | 600\n" +
                 "7 | 4 | 5 | 750");
+
         InputFileReader inputFileReader = new InputFileReader();
-        inputFileReader.saveMainFileData(reader);
+        Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
+        assertEquals("Błędny format pliku w linii 2", exception.getMessage());
     }
 
-    @Test(expected = InvalidFileFormatException.class)
+    @Test
     public void readMainFileWithIncorrectHeaderCount() throws Exception {
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "1 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
@@ -116,10 +120,12 @@ public class InputFileReaderTest {
                 "3 | Pomnik Anonimowego Przechodnia | 40 | 70\n" +
                 "\n");
         InputFileReader inputFileReader = new InputFileReader();
-        inputFileReader.saveMainFileData(reader);
+
+        Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
+        assertEquals("Niepoprawna liczba nagłówków. Oczekiwana liczba nagłówków to: 3", exception.getMessage());
     }
 
-    @Test(expected = InvalidFileFormatException.class)
+    @Test
     public void readMainFileWithIdOutOfBounds() throws Exception {
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "10000000000000000000000000000000000000000000000000000000000000000000 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
@@ -142,7 +148,9 @@ public class InputFileReaderTest {
                 "6 | 3 | 5 | 600\n" +
                 "7 | 4 | 5 | 750");
         InputFileReader inputFileReader = new InputFileReader();
-        inputFileReader.saveMainFileData(reader);
+
+        Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
+        assertEquals("Błędny format pliku w linii 2", exception.getMessage());
     }
 
     @Test
