@@ -156,16 +156,25 @@ Jeżeli udało się poprawnie wczytać dane o pacjentach oraz mapę, użytkownik
 
 \section{Komunikaty o błędach}
 {\fontsize{14}{14}\selectfont 
-Program będzie odpowiednio zabezpieczony, a w przypadku błędów ze strony użytkownika będą wyświetlane komunikaty o:
-\begin{itemize}
-\item podaniu złych danych wejściowych
-\item  nieudanym otwarciu pliku
-\item  nieudanej próbie zapisu danych do pliku
-\newline
-\newline
-\end{itemize}
-
+Program będzie odpowiednio zabezpieczony w stosunku do wszelkich nieprawidłowych działań podjętych przez użytkownika. Jeżeli wystąpi pewna nieprawidłowość, będą wyświetlane komunikaty w graficznym interfejsie użytkownika z dokładnym opisem błędu jaki został napotkany. Wszelkie niestosowne akcje, które będzie można napodkać w programie, przedstawione są w rozdziale "sytuacje wyjątkowe".
 }
+
+\section{Sytuacje wyjątkowe}
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{|p{6cm}|p{6cm}|}
+        \hline
+         Sytuacja wyjątkowa & Reakcja programu \\ \hline
+         Wybór nieprawidłowego formatu pliku w oknie wybierania mapy bądź pacjentów & Program przerywa wczytywanie pliku i wyświetla komunikat o błędnym pliku wejściowym \\ \hline
+         Nieodpowiedni typ danych jakiejkolwiek kolumny w pliku wejściowym & Program przerywa wczytywanie pliku i wyświetla komunikat: \emph{Zły typ danych w pliku wejściowym w wierszu <numer\_wiersza>} \\ \hline
+         Nieodpowiednia liczba kolumn w wierszu & Program przerywa wczytywanie pliku i wyświetla komunikat: \emph{Nieodpowiednia liczba kolumn w pliku wejściowym w wierszu <numer\_wiersza>} \\ \hline
+         Plik jest pusty & Program przerywa wczytywanie pliku i wyświetla komunikat: \emph{Plik nie może być pusty} \\ \hline
+         Plik z mapą zawiera mniej niż trzy nagłówki & Program przerywa wczytywanie pliku i wyświetla komunikat: \emph{Plik powinien składać się z trzech części oddzielonych nagłówkami} \\ \hline
+         Powtórzenie identyfikatora drogi lub pacjenta & Program przerywa wczytywanie pliku i wyświetla komunikat: \emph{Identyfikatory muszą być uniklane. Błąd w pliku wejściowym w wierszu <numer\_wiersza>} \\ \hline
+         Liczba szpitali przekroczy 1000 & Program przerywa wczytywanie pliku i wyświetla komunikat: \emph{Liczba szpitali nie może przekraczać 1000} \\ \hline
+         Próba dodania pacjenta poza mapą & Program przerywa dodawanie pacjenta i wyświetla komunikat: \emph{Pacjent musi się znajdować w obrębie mapy} \\ \hline
+    \end{tabular}
+\end{table}
 
 \section{Testowanie programu}
 {\fontsize{14}{14}\selectfont
