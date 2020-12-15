@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.aisd.controller.ConfigurationController">
+   <children>
+      <Label layoutX="63.0" layoutY="33.0" text="Configuration">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Label>
+      <Separator layoutY="114.0" prefHeight="3.0" prefWidth="400.0" />
+      <VBox alignment="CENTER" layoutX="63.0" layoutY="117.0" prefHeight="151.0" prefWidth="274.0">
+         <children>
+            <Label text="Display option">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="61.0" prefWidth="274.0" spacing="40.0">
+               <children>
+                  <RadioButton fx:id="animationRb" mnemonicParsing="false" selected="true" text="Animation">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="displayOpt" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="logsRb" mnemonicParsing="false" text="Logs" toggleGroup="$displayOpt" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="32.0" layoutY="268.0" prefHeight="73.0" prefWidth="336.0" spacing="20.0">
+         <children>
+            <Label text="Speed of animation/logs">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Slider fx:id="speedSlider" maxWidth="-Infinity" prefHeight="14.0" prefWidth="252.0" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
