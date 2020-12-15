@@ -78,27 +78,10 @@ public class InputFileReaderTest {
     }
 
     @Test
-    public void readMainFileWithIncorrectId() throws Exception {
+    public void readMainFileWithIncorrectId(){
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "abcdefghij | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
-                "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n" +
-                "3 | Pierwszy Szpital im. Prezesa RP | 120 | 130 | 99 | 0\n" +
-                "4 | Drugi Szpital im. Naczelnika RP | 10 | 140 | 70 | 1\n" +
-                "5 | Trzeci Szpital im. Króla RP | 140 | 10 | 996 | 0\n" +
-                "\n" +
-                "# Obiekty (id | nazwa | wsp. x | wsp. y)\n" +
-                "1 | Pomnik Wikipedii | -1 | 50\n" +
-                "2 | Pomnik Fryderyka Chopina | 110 | 55\n" +
-                "3 | Pomnik Anonimowego Przechodnia | 40 | 70\n" +
-                "\n" +
-                "# Drogi (id | id_szpitala | id_szpitala | odległość)\n" +
-                "1 | 1 | 2 | 700\n" +
-                "2 | 1 | 4 | 550\n" +
-                "3 | 1 | 5 | 800\n" +
-                "4 | 2 | 3 | 300\n" +
-                "5 | 2 | 4 | 550\n" +
-                "6 | 3 | 5 | 600\n" +
-                "7 | 4 | 5 | 750");
+                "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n");
 
         InputFileReader inputFileReader = new InputFileReader();
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
@@ -106,19 +89,14 @@ public class InputFileReaderTest {
     }
 
     @Test
-    public void readMainFileWithIncorrectHeaderCount() throws Exception {
+    public void readMainFileWithIncorrectHeaderCount(){
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "1 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
                 "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n" +
-                "3 | Pierwszy Szpital im. Prezesa RP | 120 | 130 | 99 | 0\n" +
-                "4 | Drugi Szpital im. Naczelnika RP | 10 | 140 | 70 | 1\n" +
-                "5 | Trzeci Szpital im. Króla RP | 140 | 10 | 996 | 0\n" +
                 "\n" +
                 "# Obiekty (id | nazwa | wsp. x | wsp. y)\n" +
                 "1 | Pomnik Wikipedii | -1 | 50\n" +
-                "2 | Pomnik Fryderyka Chopina | 110 | 55\n" +
-                "3 | Pomnik Anonimowego Przechodnia | 40 | 70\n" +
-                "\n");
+                "2 | Pomnik Fryderyka Chopina | 110 | 55\n");
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
@@ -126,31 +104,61 @@ public class InputFileReaderTest {
     }
 
     @Test
-    public void readMainFileWithIdOutOfBounds() throws Exception {
+    public void readMainFileWithIdOutOfBounds(){
         Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
                 "10000000000000000000000000000000000000000000000000000000000000000000 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
-                "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n" +
-                "3 | Pierwszy Szpital im. Prezesa RP | 120 | 130 | 99 | 0\n" +
-                "4 | Drugi Szpital im. Naczelnika RP | 10 | 140 | 70 | 1\n" +
-                "5 | Trzeci Szpital im. Króla RP | 140 | 10 | 996 | 0\n" +
-                "\n" +
-                "# Obiekty (id | nazwa | wsp. x | wsp. y)\n" +
-                "1 | Pomnik Wikipedii | -1 | 50\n" +
-                "2 | Pomnik Fryderyka Chopina | 110 | 55\n" +
-                "3 | Pomnik Anonimowego Przechodnia | 40 | 70\n" +
-                "\n" +
-                "# Drogi (id | id_szpitala | id_szpitala | odległość)\n" +
-                "1 | 1 | 2 | 700\n" +
-                "2 | 1 | 4 | 550\n" +
-                "3 | 1 | 5 | 800\n" +
-                "4 | 2 | 3 | 300\n" +
-                "5 | 2 | 4 | 550\n" +
-                "6 | 3 | 5 | 600\n" +
-                "7 | 4 | 5 | 750");
+                "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n");
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
         assertEquals("Błędny format pliku w linii 2", exception.getMessage());
+    }
+
+    @Test
+    public void readMainFileWithHospitalIdNotUnique(){
+        Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
+                "1| Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
+                "1 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n" +
+                "3 | Pierwszy Szpital im. Prezesa RP | 120 | 130 | 99 | 0\n");
+        InputFileReader inputFileReader = new InputFileReader();
+
+        Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
+        assertEquals("Błędny format pliku w linii 3", exception.getMessage());
+    }
+
+    @Test
+    public void readMainFileWithObjectIdNotUnique(){
+        Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
+                "1 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
+                "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n" +
+                "\n" +
+                "# Obiekty (id | nazwa | wsp. x | wsp. y)\n" +
+                "1 | Pomnik Wikipedii | -1 | 50\n" +
+                "1 | Pomnik Fryderyka Chopina | 110 | 55\n" +
+                "3 | Pomnik Anonimowego Przechodnia | 40 | 70\n");
+        InputFileReader inputFileReader = new InputFileReader();
+
+        Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
+        assertEquals("Błędny format pliku w linii 7", exception.getMessage());
+    }
+
+    @Test
+    public void readMainFileWithIncorrectHospitalIdsInPath(){
+        Reader reader = new StringReader("# Szpitale (id | nazwa | wsp. x | wsp. y | Liczba łóżek | Liczba wolnych łóżek)\n" +
+                "1 | Szpital Wojewódzki nr 997 | 10 | 10 | 1000 | 100\n" +
+                "2 | Krakowski Szpital Kliniczny | 100 | 120 | 999 | 99\n" +
+                "\n" +
+                "# Obiekty (id | nazwa | wsp. x | wsp. y)\n" +
+                "1 | Pomnik Wikipedii | -1 | 50\n" +
+                "\n" +
+                "# Drogi (id | id_szpitala | id_szpitala | odległość)\n" +
+                "1 | 100 | 2 | 700\n" +
+                "2 | 1 | 4 | 550\n" +
+                "3 | 1 | 5 | 800\n");
+        InputFileReader inputFileReader = new InputFileReader();
+
+        Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
+        assertEquals("Błędny format pliku w linii 9", exception.getMessage());
     }
 
     @Test
