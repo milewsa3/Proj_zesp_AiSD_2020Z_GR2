@@ -56,10 +56,10 @@ public class InputFileReaderTest {
         );
         assertEquals(hospitals, inputData.getHospitals());
 
-        List<ObjectOnMap> objectsOnMap = new ArrayList<>(
-                Arrays.asList(new ObjectOnMap(1, " Pomnik Wikipedii ", new Coordinate(-1, 50)),
-                        new ObjectOnMap(2, " Pomnik Fryderyka Chopina ", new Coordinate(110, 55)),
-                        new ObjectOnMap(3, " Pomnik Anonimowego Przechodnia ", new Coordinate(40, 70))
+        List<Building> objectsOnMap = new ArrayList<>(
+                Arrays.asList(new Building(1, " Pomnik Wikipedii ", new Coordinate(-1, 50)),
+                        new Building(2, " Pomnik Fryderyka Chopina ", new Coordinate(110, 55)),
+                        new Building(3, " Pomnik Anonimowego Przechodnia ", new Coordinate(40, 70))
                 )
         );
         assertEquals(objectsOnMap, inputData.getObjectsOnMap());

@@ -1,11 +1,11 @@
 package lab.aisd.model;
 
-public class ObjectOnMap {
+public class Building {
     private int id;
     private String name;
     private Coordinate coordinate;
 
-    public ObjectOnMap(int id, String name, Coordinate coordinate) {
+    public Building(int id, String name, Coordinate coordinate) {
         this.id = id;
         this.name = name;
         this.coordinate = coordinate;
@@ -42,11 +42,11 @@ public class ObjectOnMap {
             return true;
         }
 
-        if (!(o instanceof ObjectOnMap)) {
+        if (!(o instanceof Building)) {
             return false;
         }
 
-        ObjectOnMap objectOnMap = (ObjectOnMap) o;
-        return (objectOnMap.id == this.id && objectOnMap.name.equals(this.name) && objectOnMap.coordinate.equals(this.coordinate));
+        Building building = (Building) o;
+        return (building.id == this.id && building.name.equals(this.name) && building.coordinate.equals(this.coordinate));
     }
 }

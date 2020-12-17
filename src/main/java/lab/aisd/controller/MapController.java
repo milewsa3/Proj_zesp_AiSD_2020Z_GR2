@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
@@ -12,6 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 
 import javafx.stage.FileChooser;
+import lab.aisd.gui.BuildingIcon;
+import lab.aisd.gui.HospitalIcon;
+import lab.aisd.gui.MapObjectIcon;
+import lab.aisd.gui.PatientIcon;
+import lab.aisd.model.Building;
+import lab.aisd.model.Coordinate;
+import lab.aisd.model.Hospital;
 import lab.aisd.model.Patient;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.MusicPlayer;
@@ -21,9 +29,11 @@ import lab.aisd.util.input.InputFileReader;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class MapController implements Initializable {
 
@@ -89,7 +99,52 @@ public class MapController implements Initializable {
     }
 
     private void generateMap() {
-        System.out.println(mainArea.getWidth());
+        Coordinate endpoint = calculateEndPoint();
+        int maxWidth = endpoint.getX();
+        int maxHeight = endpoint.getY();
+        double widthScaleRatio = (mainArea.getPrefWidth() - MapObjectIcon.ICON_WIDTH)/ maxWidth;
+        double heightScaleRatio = (mainArea.getPrefHeight() - MapObjectIcon.ICON_WIDTH) / maxHeight;
+
+        for (Building building : mapData.getObjectsOnMap()) {
+            Coordinate coords = building.getCoordinate();
+            int x = (int)(coords.getX() * widthScaleRatio);
+            int y = (int)(coords.getY() * heightScaleRatio);
+
+            addObjectToTheMap(new BuildingIcon(x, y));
+        }
+
+        for (Hospital hospital : mapData.getHospitals()) {
+            Coordinate coords = hospital.getCoordinate();
+            int x = (int)(coords.getX() * widthScaleRatio);
+            int y = (int)(coords.getY() * heightScaleRatio);
+
+            addObjectToTheMap(new HospitalIcon(x, y));
+        }
+    }
+
+    private Coordinate calculateEndPoint() {
+        int maxHeight = 0;
+        int maxWidth = 0;
+
+        for (Building building : mapData.getObjectsOnMap()) {
+            Coordinate coords = building.getCoordinate();
+
+            if (coords.getX() > maxWidth)
+                maxWidth = coords.getX();
+            if (coords.getY() > maxHeight)
+                maxHeight = coords.getY();
+        }
+
+        for (Hospital hospital : mapData.getHospitals()) {
+            Coordinate coords = hospital.getCoordinate();
+
+            if (coords.getX() > maxWidth)
+                maxWidth = coords.getX();
+            if (coords.getY() > maxHeight)
+                maxHeight = coords.getY();
+        }
+
+        return new Coordinate(maxWidth, maxHeight);
     }
 
     @FXML
@@ -101,6 +156,8 @@ public class MapController implements Initializable {
 
         try {
             patientsData = fileReader.readPatientsFile(selectedFile.getPath());
+            if (mapData == null)
+                throw new Exception("Map data must be loaded first");
             generatePatientsOnMap();
             showDataLoadedSuccessfullyAlert();
 
@@ -123,7 +180,23 @@ public class MapController implements Initializable {
     }
 
     private void generatePatientsOnMap() {
+        Coordinate endpoint = calculateEndPoint();
+        int maxWidth = endpoint.getX();
+        int maxHeight = endpoint.getY();
+        double widthScaleRatio = (mainArea.getPrefWidth() - MapObjectIcon.ICON_WIDTH)/ maxWidth;
+        double heightScaleRatio = (mainArea.getPrefHeight() - MapObjectIcon.ICON_WIDTH) / maxHeight;
 
+        for (Patient patient : patientsData) {
+            Coordinate coords = patient.getCoordinate();
+            int x = (int)(coords.getX() * widthScaleRatio);
+            int y = (int)(coords.getY() * heightScaleRatio);
+
+            addObjectToTheMap(new PatientIcon(x, y));
+        }
+    }
+
+    private void addObjectToTheMap(Node node) {
+        mainArea.getChildren().add(node);
     }
 
     @FXML

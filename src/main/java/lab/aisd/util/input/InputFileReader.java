@@ -78,7 +78,7 @@ public class InputFileReader {
         }
     }
 
-    private ObjectOnMap readObjectOnMap(String line, int lineNumber, Map<Integer, Integer> objectIds) throws InvalidFileFormatException {
+    private Building readObjectOnMap(String line, int lineNumber, Map<Integer, Integer> objectIds) throws InvalidFileFormatException {
         Scanner scanner = new Scanner(line).useDelimiter("\\|");
         int id, x, y;
         String name;
@@ -88,7 +88,7 @@ public class InputFileReader {
             name = scanner.next();
             x = Integer.parseInt(scanner.next().trim());
             y = Integer.parseInt(scanner.next().trim());
-            return new ObjectOnMap(id, name, new Coordinate(x, y));
+            return new Building(id, name, new Coordinate(x, y));
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
             throw new InvalidFileFormatException("Błędny format pliku w linii " + lineNumber);
         }
