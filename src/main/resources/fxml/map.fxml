@@ -46,7 +46,7 @@
    <center>
       <HBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="720.0" prefWidth="1200.0">
+            <AnchorPane fx:id="mainArea" prefHeight="720.0" prefWidth="1200.0">
                <children>
                   <Line endX="323.29290771484375" endY="-37.70709228515625" layoutX="276.0" layoutY="155.0" startX="-96.0" startY="48.0" />
                   <Line endX="116.0" endY="110.0" layoutX="344.0" layoutY="422.0" startX="-165.0" startY="74.0" />
