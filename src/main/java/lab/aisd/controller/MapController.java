@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -245,10 +246,24 @@ public class MapController implements Initializable {
     @FXML
     void startCalc(ActionEvent event) {
         // Main calculations of the program (Business logic)
-        if (!userWantsToStartCalc() || !isDataValid())
+        if (!userWantsToStartCalc())
             return;
 
+        if (!isDataValid()) {
+            showDataNotValidError();
+            return;
+        }
+
         System.out.println("Calc started");
+    }
+
+    private void showDataNotValidError() {
+        StageManager.getInstance().showAlertScene(
+                Alert.AlertType.ERROR,
+                "Error",
+                "Data issue",
+                "Data is not loaded"
+        );
     }
 
     private boolean userWantsToStartCalc() {
@@ -262,19 +277,15 @@ public class MapController implements Initializable {
     }
 
     private boolean isDataValid() {
-        if (mapData != null && patientsData != null) {
-            return true;
-        }
-        else {
-            StageManager.getInstance().showAlertScene(
-                    Alert.AlertType.ERROR,
-                    "Error",
-                    "Data issue",
-                    "Data is not loaded"
-            );
+        return isMapLoaded() && isPatientsLoaded();
+    }
 
-            return false;
-        }
+    private boolean isMapLoaded() {
+        return mapData != null;
+    }
+
+    private boolean isPatientsLoaded() {
+        return patientsData != null;
     }
 
     @Override
@@ -285,7 +296,28 @@ public class MapController implements Initializable {
     }
 
     private void initAddingPatientsOnDoubleClick() {
-
+        mainArea.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    if(mouseEvent.getClickCount() == 2) {
+                        if (!isMapLoaded()) {
+                            StageManager.getInstance().showAlertScene(
+                                    Alert.AlertType.ERROR,
+                                    "Error",
+                                    "Map not loaded",
+                                    "To load patient, you have to load map first"
+                            );
+                        } else {
+                            addObjectToTheMap(new PatientIcon(
+                                    (int)mouseEvent.getX() - MapObjectIcon.ICON_WIDTH / 2,
+                                    (int)mouseEvent.getY() - MapObjectIcon.ICON_WIDTH / 2
+                            ));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void initMousePositionLabel() {
