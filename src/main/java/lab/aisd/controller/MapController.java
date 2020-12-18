@@ -2,25 +2,23 @@ package lab.aisd.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
-import lab.aisd.gui.BuildingIcon;
-import lab.aisd.gui.HospitalIcon;
-import lab.aisd.gui.MapObjectIcon;
-import lab.aisd.gui.PatientIcon;
-import lab.aisd.model.Building;
-import lab.aisd.model.Coordinate;
-import lab.aisd.model.Hospital;
-import lab.aisd.model.Patient;
+import lab.aisd.gui.*;
+import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.MusicPlayer;
 import lab.aisd.util.StageManager;
@@ -29,11 +27,7 @@ import lab.aisd.util.input.InputFileReader;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.function.Consumer;
+import java.util.*;
 
 public class MapController implements Initializable {
 
@@ -41,6 +35,9 @@ public class MapController implements Initializable {
     private InputFileReader fileReader = new InputFileReader();
     private InputData mapData;
     private List<Patient> patientsData;
+
+    private Map<Integer, HospitalIcon> idAndHospital = new HashMap<>();
+    private Map<Integer, BuildingIcon> idAndBuilding = new HashMap<>();
 
     @FXML
     private MenuItem newMenuIt;
@@ -68,6 +65,9 @@ public class MapController implements Initializable {
 
     @FXML
     private Button settingsBt;
+
+    @FXML
+    private Label mousePosLb;
 
     @FXML
     private AnchorPane mainArea;
@@ -109,16 +109,34 @@ public class MapController implements Initializable {
             Coordinate coords = building.getCoordinate();
             int x = (int)(coords.getX() * widthScaleRatio);
             int y = (int)(coords.getY() * heightScaleRatio);
+            BuildingIcon icon = new BuildingIcon(x, y);
+            idAndBuilding.put(building.getId(), icon);
 
-            addObjectToTheMap(new BuildingIcon(x, y));
+            addObjectToTheMap(icon);
         }
 
         for (Hospital hospital : mapData.getHospitals()) {
             Coordinate coords = hospital.getCoordinate();
             int x = (int)(coords.getX() * widthScaleRatio);
             int y = (int)(coords.getY() * heightScaleRatio);
+            HospitalIcon icon = new HospitalIcon(x, y);
+            idAndHospital.put(hospital.getId(), icon);
 
-            addObjectToTheMap(new HospitalIcon(x, y));
+            addObjectToTheMap(icon);
+        }
+
+        draw_paths();
+    }
+
+    private void draw_paths() {
+        for (Path path : mapData.getPaths()) {
+            Line pathLine = LineConnector.connect(
+                    idAndHospital.get(path.getFirstHospitalID()),
+                    idAndHospital.get(path.getSecondHospitalID())
+            );
+
+            addObjectToTheMap(pathLine);
+            pathLine.toBack();
         }
     }
 
@@ -263,9 +281,26 @@ public class MapController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         StageManager.getInstance().setResizable(true);
         initAddingPatientsOnDoubleClick();
+        initMousePositionLabel();
     }
 
     private void initAddingPatientsOnDoubleClick() {
 
+    }
+
+    private void initMousePositionLabel() {
+        mainArea.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mousePosLb.setText("x: " + event.getX() + ", y: " + event.getY());
+            }
+        });
+
+        mainArea.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mousePosLb.setText("Exited");
+            }
+        });
     }
 }

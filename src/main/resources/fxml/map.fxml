@@ -62,7 +62,14 @@
                         </Label>
                      </children>
                   </HBox>
-                  <Region prefHeight="43.0" prefWidth="769.0" HBox.hgrow="ALWAYS" />
+                  <Separator layoutX="862.0" layoutY="15.0" orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox alignment="CENTER" prefHeight="43.0" prefWidth="124.0">
+                     <children>
+                        <Label fx:id="mousePosLb" text="x: 0, y: 0" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <Region prefHeight="43.0" prefWidth="585.0" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="322.0" spacing="20.0">
                      <children>
                         <Button fx:id="startBt" mnemonicParsing="false" onAction="#startCalc" prefHeight="30.0" prefWidth="70.0" text="Start" />
