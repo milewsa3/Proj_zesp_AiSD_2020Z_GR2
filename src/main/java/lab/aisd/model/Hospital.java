@@ -15,6 +15,9 @@ public class Hospital {
         this.freeBedsCount = freeBedsCount;
     }
 
+    public Hospital(){
+    }
+
     public int getId() {
         return id;
     }
