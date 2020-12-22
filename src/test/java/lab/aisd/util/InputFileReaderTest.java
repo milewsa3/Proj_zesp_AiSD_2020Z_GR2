@@ -62,7 +62,7 @@ public class InputFileReaderTest {
                         new Building(3, " Pomnik Anonimowego Przechodnia ", new Coordinate(40, 70))
                 )
         );
-        assertEquals(objectsOnMap, inputData.getObjectsOnMap());
+        assertEquals(objectsOnMap, inputData.getBuildings());
 
         List<Path> paths = new ArrayList<>(
                 Arrays.asList(new Path(1, 1, 2, 700),

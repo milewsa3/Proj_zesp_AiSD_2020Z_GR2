@@ -1,22 +1,13 @@
 package lab.aisd.model;
 
-public class Building {
-    private int id;
+import java.util.Objects;
+
+public class Building extends MapObject {
     private String name;
-    private Coordinate coordinate;
 
-    public Building(int id, String name, Coordinate coordinate) {
-        this.id = id;
+    public Building(int id, String name, Coordinate position) {
+        super(id, position);
         this.name = name;
-        this.coordinate = coordinate;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -27,26 +18,17 @@ public class Building {
         this.name = name;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Building building = (Building) o;
+        return name.equals(building.name);
     }
 
     @Override
-    public boolean equals(Object o) {
-
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof Building)) {
-            return false;
-        }
-
-        Building building = (Building) o;
-        return (building.id == this.id && building.name.equals(this.name) && building.coordinate.equals(this.coordinate));
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

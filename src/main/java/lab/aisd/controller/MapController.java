@@ -21,7 +21,6 @@ import javafx.stage.FileChooser;
 import lab.aisd.gui.*;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
-import lab.aisd.util.MusicPlayer;
 import lab.aisd.util.StageManager;
 import lab.aisd.util.input.InputData;
 import lab.aisd.util.input.InputFileReader;
@@ -32,13 +31,11 @@ import java.util.*;
 
 public class MapController implements Initializable {
 
-    private MusicPlayer musicPlayer = MusicPlayer.getInstance();
-    private InputFileReader fileReader = new InputFileReader();
     private InputData mapData;
     private List<Patient> patientsData;
 
-    private Map<Integer, HospitalIcon> idAndHospital = new HashMap<>();
-    private Map<Integer, BuildingIcon> idAndBuilding = new HashMap<>();
+    private VisualInputData visualData;
+
 
     @FXML
     private MenuItem newMenuIt;
@@ -74,6 +71,9 @@ public class MapController implements Initializable {
     private AnchorPane mainArea;
 
     @FXML
+    private HBox mainAreaBox;
+
+    @FXML
     void delete(ActionEvent event) {
 
     }
@@ -86,8 +86,16 @@ public class MapController implements Initializable {
             return;
 
         try {
-            mapData = fileReader.readMainFile(selectedFile.getPath());
-            generateMap();
+            mapData = new InputFileReader().readMainFile(selectedFile.getPath());
+
+            visualData = new MapGenerator((int)mainArea.getPrefWidth(), (int)mainArea.getPrefHeight())
+                    .generate(mapData);
+
+            for (MapObjectIcon icon : visualData)
+                addObjectToTheMap(icon);
+
+            draw_paths();
+
             showDataLoadedSuccessfullyAlert();
 
         } catch (Exception e) {
@@ -99,71 +107,28 @@ public class MapController implements Initializable {
         }
     }
 
-    private void generateMap() {
-        Coordinate endpoint = calculateEndPoint();
-        int maxWidth = endpoint.getX();
-        int maxHeight = endpoint.getY();
-        double widthScaleRatio = (mainArea.getPrefWidth() - MapObjectIcon.ICON_WIDTH)/ maxWidth;
-        double heightScaleRatio = (mainArea.getPrefHeight() - MapObjectIcon.ICON_WIDTH) / maxHeight;
-
-        for (Building building : mapData.getObjectsOnMap()) {
-            Coordinate coords = building.getCoordinate();
-            int x = (int)(coords.getX() * widthScaleRatio);
-            int y = (int)(coords.getY() * heightScaleRatio);
-            BuildingIcon icon = new BuildingIcon(x, y);
-            idAndBuilding.put(building.getId(), icon);
-
-            addObjectToTheMap(icon);
-        }
-
-        for (Hospital hospital : mapData.getHospitals()) {
-            Coordinate coords = hospital.getCoordinate();
-            int x = (int)(coords.getX() * widthScaleRatio);
-            int y = (int)(coords.getY() * heightScaleRatio);
-            HospitalIcon icon = new HospitalIcon(x, y);
-            idAndHospital.put(hospital.getId(), icon);
-
-            addObjectToTheMap(icon);
-        }
-
-        draw_paths();
-    }
-
     private void draw_paths() {
         for (Path path : mapData.getPaths()) {
-            Line pathLine = LineConnector.connect(
-                    idAndHospital.get(path.getFirstHospitalID()),
-                    idAndHospital.get(path.getSecondHospitalID())
+            Hospital from = null;
+            Hospital to = null;
+
+            for (Hospital h : mapData.getHospitals()) {
+                if (h.getId() == path.getFirstHospitalID()) {
+                    from = h;
+                    continue;
+                }
+                if (h.getId() == path.getSecondHospitalID())
+                    to = h;
+            }
+
+            Line pathLine = PathCreator.connect(
+                    visualData.getHospital(from),
+                    visualData.getHospital(to)
             );
 
             addObjectToTheMap(pathLine);
             pathLine.toBack();
         }
-    }
-
-    private Coordinate calculateEndPoint() {
-        int maxHeight = 0;
-        int maxWidth = 0;
-
-        for (Building building : mapData.getObjectsOnMap()) {
-            Coordinate coords = building.getCoordinate();
-
-            if (coords.getX() > maxWidth)
-                maxWidth = coords.getX();
-            if (coords.getY() > maxHeight)
-                maxHeight = coords.getY();
-        }
-
-        for (Hospital hospital : mapData.getHospitals()) {
-            Coordinate coords = hospital.getCoordinate();
-
-            if (coords.getX() > maxWidth)
-                maxWidth = coords.getX();
-            if (coords.getY() > maxHeight)
-                maxHeight = coords.getY();
-        }
-
-        return new Coordinate(maxWidth, maxHeight);
     }
 
     @FXML
@@ -174,10 +139,9 @@ public class MapController implements Initializable {
             return;
 
         try {
-            patientsData = fileReader.readPatientsFile(selectedFile.getPath());
+            patientsData = new InputFileReader().readPatientsFile(selectedFile.getPath());
             if (mapData == null)
                 throw new Exception("Map data must be loaded first");
-            generatePatientsOnMap();
             showDataLoadedSuccessfullyAlert();
 
         } catch (Exception e) {
@@ -196,22 +160,6 @@ public class MapController implements Initializable {
                 "Data loaded successfully",
                 "Great. Your data is valid and it was loaded properly."
         );
-    }
-
-    private void generatePatientsOnMap() {
-        Coordinate endpoint = calculateEndPoint();
-        int maxWidth = endpoint.getX();
-        int maxHeight = endpoint.getY();
-        double widthScaleRatio = (mainArea.getPrefWidth() - MapObjectIcon.ICON_WIDTH)/ maxWidth;
-        double heightScaleRatio = (mainArea.getPrefHeight() - MapObjectIcon.ICON_WIDTH) / maxHeight;
-
-        for (Patient patient : patientsData) {
-            Coordinate coords = patient.getCoordinate();
-            int x = (int)(coords.getX() * widthScaleRatio);
-            int y = (int)(coords.getY() * heightScaleRatio);
-
-            addObjectToTheMap(new PatientIcon(x, y));
-        }
     }
 
     private void addObjectToTheMap(Node node) {
@@ -293,6 +241,9 @@ public class MapController implements Initializable {
         StageManager.getInstance().setResizable(true);
         initAddingPatientsOnDoubleClick();
         initMousePositionLabel();
+
+        /*mainArea.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
     }
 
     private void initAddingPatientsOnDoubleClick() {
@@ -310,8 +261,8 @@ public class MapController implements Initializable {
                             );
                         } else {
                             addObjectToTheMap(new PatientIcon(
-                                    (int)mouseEvent.getX() - MapObjectIcon.ICON_WIDTH / 2,
-                                    (int)mouseEvent.getY() - MapObjectIcon.ICON_WIDTH / 2
+                                    (int)mouseEvent.getX() - MapObjectIcon.DEFAULT_ICON_WIDTH / 2,
+                                    (int)mouseEvent.getY() - MapObjectIcon.DEFAULT_ICON_WIDTH / 2
                             ));
                         }
                     }

@@ -1,26 +1,17 @@
 package lab.aisd.model;
 
-public class Hospital {
-    private int id;
+import java.util.Objects;
+
+public class Hospital extends MapObject {
     private String name;
-    private Coordinate coordinate;
     private int bedsCount;
     private int freeBedsCount;
 
-    public Hospital(int id, String name, Coordinate coordinate, int bedsCount, int freeBedsCount) {
-        this.id = id;
+    public Hospital(int id, String name, Coordinate position, int bedsCount, int freeBedsCount) {
+        super(id, position);
         this.name = name;
-        this.coordinate = coordinate;
         this.bedsCount = bedsCount;
         this.freeBedsCount = freeBedsCount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -29,14 +20,6 @@ public class Hospital {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
     }
 
     public int getBedsCount() {
@@ -57,17 +40,15 @@ public class Hospital {
 
     @Override
     public boolean equals(Object o) {
-
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof Hospital)) {
-            return false;
-        }
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Hospital hospital = (Hospital) o;
-        return (hospital.id == this.id && hospital.name.equals(this.name) && hospital.coordinate.equals(this.coordinate)
-                && hospital.bedsCount == this.bedsCount && hospital.freeBedsCount == this.freeBedsCount);
+        return bedsCount == hospital.bedsCount && freeBedsCount == hospital.freeBedsCount && name.equals(hospital.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, bedsCount, freeBedsCount);
     }
 }

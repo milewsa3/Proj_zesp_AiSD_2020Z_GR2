@@ -48,7 +48,7 @@ public class InputFileReader {
 
             switch (header) {
                 case 1 -> inputData.getHospitals().add(readHospital(line, lineNumber, hospitalIds));
-                case 2 -> inputData.getObjectsOnMap().add(readObjectOnMap(line, lineNumber, objectIds));
+                case 2 -> inputData.getBuildings().add(readObjectOnMap(line, lineNumber, objectIds));
                 case 3 -> inputData.getPaths().add(readPath(line, lineNumber, hospitalIds, pathIds));
             }
             line = reader.readLine();

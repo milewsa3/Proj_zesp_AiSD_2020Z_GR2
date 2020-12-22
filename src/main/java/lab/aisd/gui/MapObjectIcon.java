@@ -2,23 +2,43 @@ package lab.aisd.gui;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 
 public class MapObjectIcon extends StackPane {
-    public static final int ICON_WIDTH = 70;
+    public static final int DEFAULT_ICON_WIDTH = 50;
     protected ImageView icon;
 
     public MapObjectIcon(int x, int y) {
-        setTranslateX(x);
-        setTranslateY(y);
+        this.setPrefWidth(100);
+        this.setPrefHeight(100);
+        setLayoutX(x);
+        setLayoutY(y);
     }
 
     public MapObjectIcon(int x, int y, String relativePathToImage) {
         this(x, y);
+        initIcon(relativePathToImage);
+    }
+
+    private void initIcon(String relativePathToImage) {
         icon = new ImageView(new Image(getClass().getResource(relativePathToImage).toString()));
         icon.setPreserveRatio(true);
-        icon.setFitWidth(ICON_WIDTH);
+        icon.fitHeightProperty().bind(this.prefHeightProperty());
+        /*this.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
         getChildren().add(icon);
+    }
+
+    @Override
+    public String toString() {
+        return "MapObjectIcon{" +
+                "Width: " + this.getPrefWidth() +
+                ", Height: " + this.getPrefHeight() +
+                ", x Layout: " + this.getLayoutX() +
+                ", y Layout: " + this.getLayoutY() +
+                ", x Translation: " + this.getTranslateX() +
+                ", y Translation: " + this.getTranslateY();
     }
 }

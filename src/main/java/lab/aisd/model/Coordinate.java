@@ -1,5 +1,7 @@
 package lab.aisd.model;
 
+import java.util.Objects;
+
 public class Coordinate {
     private int x;
     private int y;
@@ -27,16 +29,22 @@ public class Coordinate {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinate that = (Coordinate) o;
+        return x == that.x && y == that.y;
+    }
 
-        if (o == this) {
-            return true;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
 
-        if (!(o instanceof Coordinate)) {
-            return false;
-        }
-
-        Coordinate coordinate = (Coordinate) o;
-        return (coordinate.x == this.x && coordinate.y == this.y);
+    @Override
+    public String toString() {
+        return "Coordinate{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
