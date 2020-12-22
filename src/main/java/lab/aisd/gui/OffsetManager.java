@@ -1,16 +1,17 @@
 package lab.aisd.gui;
 
-import lab.aisd.model.Building;
-import lab.aisd.model.Coordinate;
-import lab.aisd.model.Hospital;
+import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
+
+import java.util.List;
 
 public class OffsetManager {
     private Integer offsetX;
     private Integer offsetY;
 
     public void offset(InputData data) {
-        calculateOffset(data);
+        if (offsetX == null || offsetY == null)
+            calculateOffset(data);
 
         for (Hospital h : data.getHospitals())
             offset(h);
@@ -47,11 +48,16 @@ public class OffsetManager {
         offsetY = -smallestY;
     }
 
-    private void offset(Hospital h) {
-        h.getPosition().offsetBy(offsetX, offsetY);
+    private void offset(MapObject object) {
+        object.getPosition().offsetBy(offsetX, offsetY);
     }
 
-    private void offset(Building b) {
-        b.getPosition().offsetBy(offsetX, offsetY);
+    public void offset(List<Patient> patients) {
+        if (offsetX == null || offsetY == null)
+            throw new RuntimeException("Offset should be already calculated using map file");
+
+        for (Patient p : patients) {
+            offset(p);
+        }
     }
 }

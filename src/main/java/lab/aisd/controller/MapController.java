@@ -15,7 +15,6 @@ import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import lab.aisd.gui.*;
@@ -35,7 +34,10 @@ public class MapController implements Initializable {
     private List<Patient> patientsData;
 
     private VisualInputData visualData;
-    private OffsetManager mapOffset;
+    private PatientIconsCollection patientIconsData;
+
+    private OffsetManager offsetManager;
+    private MapGenerator mapGenerator;
 
 
     @FXML
@@ -89,10 +91,9 @@ public class MapController implements Initializable {
         try {
             mapData = new InputFileReader().readMainFile(selectedFile.getPath());
 
-            mapOffset.offset(mapData);
+            offsetManager.offset(mapData);
 
-            visualData = new MapGenerator((int)mainArea.getPrefWidth(), (int)mainArea.getPrefHeight())
-                    .generate(mapData);
+            visualData = mapGenerator.generate(mapData);
 
             for (MapObjectIcon icon : visualData)
                 addObjectToTheMap(icon);
@@ -142,9 +143,18 @@ public class MapController implements Initializable {
             return;
 
         try {
-            patientsData = new InputFileReader().readPatientsFile(selectedFile.getPath());
             if (mapData == null)
                 throw new Exception("Map data must be loaded first");
+
+            patientsData = new InputFileReader().readPatientsFile(selectedFile.getPath());
+
+            offsetManager.offset(patientsData);
+
+            patientIconsData = mapGenerator.generate(patientsData);
+
+            for (MapObjectIcon icon : patientIconsData)
+                addObjectToTheMap(icon);
+
             showDataLoadedSuccessfullyAlert();
 
         } catch (Exception e) {
@@ -244,8 +254,9 @@ public class MapController implements Initializable {
         StageManager.getInstance().setResizable(true);
         initAddingPatientsOnDoubleClick();
         initMousePositionLabel();
-        mapOffset = new OffsetManager();
+        offsetManager = new OffsetManager();
 
+        mapGenerator = new MapGenerator((int)mainArea.getPrefWidth(), (int)mainArea.getPrefHeight());
         /*mainArea.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
     }
@@ -264,10 +275,18 @@ public class MapController implements Initializable {
                                     "To load patient, you have to load map first"
                             );
                         } else {
-                            addObjectToTheMap(new PatientIcon(
-                                    (int)mouseEvent.getX() - MapObjectIcon.DEFAULT_ICON_WIDTH / 2,
-                                    (int)mouseEvent.getY() - MapObjectIcon.DEFAULT_ICON_WIDTH / 2
-                            ));
+                            PatientIcon patientIcon = new PatientIcon(
+                                    (int)mouseEvent.getX(),
+                                    (int)mouseEvent.getY()
+                            );
+
+                            patientIcon.setTranslateX(-patientIcon.getPrefWidth()/2);
+                            patientIcon.setTranslateY(-patientIcon.getPrefHeight()/2);
+
+                            patientIcon.setPrefHeight(mapGenerator.getScaler()
+                                    .getPatientHeight(patientsData.size()));
+
+                            addObjectToTheMap(patientIcon);
                         }
                     }
                 }

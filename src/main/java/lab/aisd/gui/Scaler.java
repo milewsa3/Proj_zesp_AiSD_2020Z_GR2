@@ -38,6 +38,10 @@ public class Scaler {
             throw new RuntimeException("Ratios must be calculated first");
     }
 
+    public boolean areRatiosCalculated() {
+        return ratiosCalculated;
+    }
+
     public void scale(Node ... nodes) {
         for (Node n : nodes)
             scale(n);
@@ -71,6 +75,10 @@ public class Scaler {
 
     public int getBuildingHeight(int numOfObjs) {
         return getHospitalHeight(numOfObjs) -20;
+    }
+
+    public int getPatientHeight(int numOfObjs) {
+        return getHospitalHeight(numOfObjs);
     }
 
     public double getWidthRatio() {

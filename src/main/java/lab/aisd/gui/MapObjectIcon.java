@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 
 
 public class MapObjectIcon extends StackPane {
-    public static final int DEFAULT_ICON_WIDTH = 50;
     protected ImageView icon;
 
     public MapObjectIcon(int x, int y) {
@@ -26,6 +25,7 @@ public class MapObjectIcon extends StackPane {
         icon = new ImageView(new Image(getClass().getResource(relativePathToImage).toString()));
         icon.setPreserveRatio(true);
         icon.fitHeightProperty().bind(this.prefHeightProperty());
+
         /*this.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
         getChildren().add(icon);
