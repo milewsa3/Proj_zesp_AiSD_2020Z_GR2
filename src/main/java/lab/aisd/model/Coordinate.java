@@ -27,6 +27,11 @@ public class Coordinate {
         this.y = y;
     }
 
+    public void offsetBy(int offsetX, int offsetY) {
+        x += offsetX;
+        y += offsetY;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -35,6 +35,7 @@ public class MapController implements Initializable {
     private List<Patient> patientsData;
 
     private VisualInputData visualData;
+    private OffsetManager mapOffset;
 
 
     @FXML
@@ -87,6 +88,8 @@ public class MapController implements Initializable {
 
         try {
             mapData = new InputFileReader().readMainFile(selectedFile.getPath());
+
+            mapOffset.offset(mapData);
 
             visualData = new MapGenerator((int)mainArea.getPrefWidth(), (int)mainArea.getPrefHeight())
                     .generate(mapData);
@@ -241,6 +244,7 @@ public class MapController implements Initializable {
         StageManager.getInstance().setResizable(true);
         initAddingPatientsOnDoubleClick();
         initMousePositionLabel();
+        mapOffset = new OffsetManager();
 
         /*mainArea.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
