@@ -1,24 +1,26 @@
 package lab.aisd.algorithm.model;
 
+import lab.aisd.model.Coordinate;
 import lab.aisd.model.Hospital;
 
 public class Node extends Hospital {
     private boolean isHospital;
     private boolean isVisited;
-    private int orderedId; // just because edges in graph are stored in list; has to be unique
+    private int orderedId; // because edges in graph are stored in list; has to be unique
 
-    public Node(Hospital hospital, boolean isHospital, boolean isVisited, int orderedId) {
+    public Node(Hospital hospital, boolean isHospital, int orderedId) {
         super(hospital.getId(), hospital.getName(), hospital.getCoordinate(),
                 hospital.getBedsCount(), hospital.getFreeBedsCount());
         this.isHospital = isHospital;
-        this.isVisited = isVisited;
+        this.isVisited = false;
         this.orderedId = orderedId;
     }
 
-    public Node(boolean isHospital, boolean isVisited, int orderedId) {
+    public Node(Coordinate coordinate, boolean isHospital, int orderedId) {
         super();
+        setCoordinate(coordinate);
         this.isHospital = isHospital;
-        this.isVisited = isVisited;
+        this.isVisited = false;
         this.orderedId = orderedId;
     }
 
@@ -26,7 +28,7 @@ public class Node extends Hospital {
         return isHospital;
     }
 
-    public void setHospital(boolean hospital) {
+    public void setIsHospital(boolean hospital) {
         isHospital = hospital;
     }
 
@@ -34,7 +36,7 @@ public class Node extends Hospital {
         return isVisited;
     }
 
-    public void setVisited(boolean visited) {
+    public void setIsVisited(boolean visited) {
         isVisited = visited;
     }
 

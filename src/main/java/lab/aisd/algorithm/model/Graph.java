@@ -2,6 +2,7 @@ package lab.aisd.algorithm.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Graph implements Iterable<Edge> {
     private int nodesNumber;
@@ -15,17 +16,34 @@ public class Graph implements Iterable<Edge> {
         }
     }
 
-    void addEdge(Node from, Node to, int distance) {
+    public void addEdge(Node from, Node to, int distance) {
         int fromId = from.getOrderedId();
         int toId = to.getOrderedId();
         edges.get(fromId).add(new Edge(from, to, distance));
         edges.get(toId).add(new Edge(to, from, distance));
     }
 
+    public Node getNodeByOrderedId(int orderedId) {
+        if (!edges.get(orderedId).isEmpty()) {
+            return edges.get(orderedId).get(0).getFrom();
+        }
+        return null;
+    }
+
+    public List<Node> getAllNodes() {
+        List<Node> nodes = new ArrayList<>();
+        for (int i = 0; i < nodesNumber; i++) {
+            Node node = getNodeByOrderedId(i);
+            if (node != null) {
+                nodes.add(node);
+            }
+        }
+        return nodes;
+    }
+
     public int getNodesNumber() {
         return nodesNumber;
     }
-
 
     public ArrayList<ArrayList<Edge>> getEdges() {
         return edges;
