@@ -29,4 +29,8 @@ public class PatientIconsCollection implements Iterable<PatientIcon>{
     public void setPatients(Map<Patient, PatientIcon> patients) {
         this.patients = patients;
     }
+
+    public int size() {
+        return patients.size();
+    }
 }

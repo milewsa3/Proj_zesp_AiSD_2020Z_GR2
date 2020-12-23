@@ -2,6 +2,7 @@ package lab.aisd.gui;
 
 import javafx.scene.Node;
 import lab.aisd.model.Coordinate;
+import lab.aisd.model.MapObject;
 
 public class Scaler {
     public final int WINDOW_WIDTH;
@@ -45,6 +46,14 @@ public class Scaler {
     public void scale(Node ... nodes) {
         for (Node n : nodes)
             scale(n);
+    }
+
+    public void unscale(MapObject obj) {
+        checkIfRatiosCalculated();
+
+        Coordinate pos = obj.getPosition();
+        pos.setX((int)(pos.getX() / widthRatio));
+        pos.setY((int)(pos.getY() / heightRatio));
     }
 
     public void unscale(Node node) {

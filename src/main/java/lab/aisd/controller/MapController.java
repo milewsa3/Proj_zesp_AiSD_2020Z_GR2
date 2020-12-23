@@ -275,18 +275,22 @@ public class MapController implements Initializable {
                                     "To load patient, you have to load map first"
                             );
                         } else {
-                            PatientIcon patientIcon = new PatientIcon(
+                            if (patientIconsData == null)
+                                return;
+
+                            PatientGenerator pg = new PatientGenerator(
                                     (int)mouseEvent.getX(),
-                                    (int)mouseEvent.getY()
+                                    (int)mouseEvent.getY(),
+                                    mapGenerator.getScaler(),
+                                    patientsData.size(),
+                                    patientIconsData.size() + 1
                             );
 
-                            patientIcon.setTranslateX(-patientIcon.getPrefWidth()/2);
-                            patientIcon.setTranslateY(-patientIcon.getPrefHeight()/2);
+                            pg.generate();
 
-                            patientIcon.setPrefHeight(mapGenerator.getScaler()
-                                    .getPatientHeight(patientsData.size()));
-
-                            addObjectToTheMap(patientIcon);
+                            patientsData.add(pg.getPatient());
+                            patientIconsData.addPatient(pg.getPatient(), pg.getPatientIcon());
+                            addObjectToTheMap(pg.getPatientIcon());
                         }
                     }
                 }
