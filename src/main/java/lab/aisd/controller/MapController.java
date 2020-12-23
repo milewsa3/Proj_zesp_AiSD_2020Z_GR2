@@ -1,5 +1,6 @@
 package lab.aisd.controller;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +18,8 @@ import javafx.scene.control.MenuItem;
 
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
+import lab.aisd.animation.FadeInTransition;
 import lab.aisd.gui.*;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
@@ -176,7 +179,10 @@ public class MapController implements Initializable {
     }
 
     private void addObjectToTheMap(Node node) {
+        FadeInTransition ft = new FadeInTransition(node);
+
         mainArea.getChildren().add(node);
+        ft.play();
     }
 
     @FXML
