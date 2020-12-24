@@ -9,16 +9,8 @@ public class Node extends Hospital {
     private int orderedId; // because edges in graph are stored in list; has to be unique
 
     public Node(Hospital hospital, boolean isHospital, int orderedId) {
-        super(hospital.getId(), hospital.getName(), hospital.getCoordinate(),
+        super(hospital.getId(), hospital.getName(), hospital.getPosition(),
                 hospital.getBedsCount(), hospital.getFreeBedsCount());
-        this.isHospital = isHospital;
-        this.isVisited = false;
-        this.orderedId = orderedId;
-    }
-
-    public Node(Coordinate coordinate, boolean isHospital, int orderedId) {
-        super();
-        setCoordinate(coordinate);
         this.isHospital = isHospital;
         this.isVisited = false;
         this.orderedId = orderedId;
