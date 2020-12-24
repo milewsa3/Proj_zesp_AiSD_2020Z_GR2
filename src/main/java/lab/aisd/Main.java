@@ -1,15 +1,10 @@
 package lab.aisd;
 
 import javafx.application.Application;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.MusicPlayer;
 import lab.aisd.util.StageManager;
-
-import java.net.URL;
-import java.nio.file.Paths;
 
 public class Main extends Application {
     public static void main(String[] args) {

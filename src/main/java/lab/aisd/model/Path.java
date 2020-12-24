@@ -1,5 +1,7 @@
 package lab.aisd.model;
 
+import java.util.Objects;
+
 public class Path {
     private int id;
     private int firstHospitalID;
@@ -47,17 +49,17 @@ public class Path {
 
     @Override
     public boolean equals(Object o) {
-
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof Path)) {
-            return false;
-        }
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Path path = (Path) o;
-        return (path.id == this.id && path.firstHospitalID == this.firstHospitalID
-                && path.secondHospitalID == this.secondHospitalID && path.distance == this.distance);
+        return id == path.id
+                && firstHospitalID == path.firstHospitalID
+                && secondHospitalID == path.secondHospitalID
+                && distance == path.distance;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstHospitalID, secondHospitalID, distance);
     }
 }
