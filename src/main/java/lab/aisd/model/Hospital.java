@@ -14,6 +14,9 @@ public class Hospital extends MapObject {
         this.freeBedsCount = freeBedsCount;
     }
 
+    public Hospital() {
+    }
+
     public String getName() {
         return name;
     }

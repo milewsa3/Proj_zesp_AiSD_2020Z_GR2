@@ -16,6 +16,14 @@ public class Node extends Hospital {
         this.orderedId = orderedId;
     }
 
+    public Node(Coordinate coordinate, boolean isHospital, int orderedId) {
+        super();
+        setPosition(coordinate);
+        this.isHospital = isHospital;
+        this.isVisited = false;
+        this.orderedId = orderedId;
+    }
+
     public boolean isHospital() {
         return isHospital;
     }

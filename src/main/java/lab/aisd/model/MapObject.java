@@ -11,6 +11,9 @@ public class MapObject {
         this.position = position;
     }
 
+    public MapObject() {
+    }
+
     public int getId() {
         return id;
     }
