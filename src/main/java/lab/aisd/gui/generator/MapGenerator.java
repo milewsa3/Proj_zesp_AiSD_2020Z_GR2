@@ -1,5 +1,12 @@
-package lab.aisd.gui;
+package lab.aisd.gui.generator;
 
+import lab.aisd.gui.util.Scaler;
+import lab.aisd.gui.collection.PatientIconsCollection;
+import lab.aisd.gui.collection.VisualInputData;
+import lab.aisd.gui.model.BuildingIcon;
+import lab.aisd.gui.model.HospitalIcon;
+import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.model.PatientIcon;
 import lab.aisd.model.Building;
 import lab.aisd.model.Coordinate;
 import lab.aisd.model.Hospital;

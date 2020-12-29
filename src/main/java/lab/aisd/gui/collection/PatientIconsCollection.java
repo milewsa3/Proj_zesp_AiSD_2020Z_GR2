@@ -1,5 +1,6 @@
-package lab.aisd.gui;
+package lab.aisd.gui.collection;
 
+import lab.aisd.gui.model.PatientIcon;
 import lab.aisd.model.Patient;
 
 import java.util.HashMap;

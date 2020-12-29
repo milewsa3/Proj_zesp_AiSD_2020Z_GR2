@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.util;
 
 import javafx.scene.Node;
 import lab.aisd.model.Coordinate;

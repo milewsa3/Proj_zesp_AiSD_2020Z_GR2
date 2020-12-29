@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

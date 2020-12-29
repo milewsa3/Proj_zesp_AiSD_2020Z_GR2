@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.model;
 
 public class BuildingIcon extends MapObjectIcon {
     public BuildingIcon(int x, int y) {

@@ -1,6 +1,5 @@
 package lab.aisd.controller;
 
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,9 +17,14 @@ import javafx.scene.control.MenuItem;
 
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
-import javafx.util.Duration;
 import lab.aisd.animation.FadeInTransition;
-import lab.aisd.gui.*;
+import lab.aisd.gui.collection.PatientIconsCollection;
+import lab.aisd.gui.collection.VisualInputData;
+import lab.aisd.gui.generator.MapGenerator;
+import lab.aisd.gui.generator.PathCreator;
+import lab.aisd.gui.generator.PatientGenerator;
+import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.util.OffsetManager;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;

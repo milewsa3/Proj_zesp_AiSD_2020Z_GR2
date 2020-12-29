@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.model;
 
 public class PatientIcon extends MapObjectIcon {
     public PatientIcon(int x, int y) {
