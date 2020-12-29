@@ -15,14 +15,18 @@ import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import lab.aisd.animation.FadeInTransition;
+import lab.aisd.gui.BoarderMarkerImpl;
+import lab.aisd.gui.BorderMarker;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.generator.MapGenerator;
 import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
+import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
 import lab.aisd.model.*;
@@ -42,9 +46,11 @@ public class MapController implements Initializable {
 
     private VisualInputData visualData;
     private PatientIconsCollection patientIconsData;
+    private BorderMarker borderMarker;
 
     private OffsetManager offsetManager;
     private MapGenerator mapGenerator;
+
 
 
     @FXML
@@ -107,6 +113,8 @@ public class MapController implements Initializable {
 
             draw_paths();
 
+            draw_border();
+
             showDataLoadedSuccessfullyAlert();
 
         } catch (Exception e) {
@@ -139,6 +147,31 @@ public class MapController implements Initializable {
 
             addObjectToTheMap(pathLine);
             pathLine.toBack();
+        }
+    }
+
+    private void draw_border() {
+        borderMarker = new BoarderMarkerImpl(mapData);
+
+        List<MapObject> borderPoints = borderMarker.calculateBorderPoints();
+
+        if (borderPoints.size() == 0)
+            return;
+
+        MapObjectIcon previous = getProperIcon(borderPoints.get(0));
+
+        for (int i=1;i<borderPoints.size();i++) {
+            MapObjectIcon icon = getProperIcon(borderPoints.get(i));
+            PathCreator.connect(previous, icon);
+            previous = icon;
+        }
+    }
+
+    private MapObjectIcon getProperIcon(MapObject obj) {
+        if (obj instanceof Hospital) {
+            return visualData.getHospital((Hospital) obj);
+        } else {
+            return visualData.getBuilding((Building) obj);
         }
     }
 
@@ -297,6 +330,17 @@ public class MapController implements Initializable {
                             );
 
                             pg.generate();
+
+                            if (!borderMarker.isWithinBorder(pg.getPatient())) {
+                                StageManager.getInstance().showAlertScene(
+                                        Alert.AlertType.ERROR,
+                                        "Error",
+                                        "Patient is not within the border",
+                                        "You must locate patient within the border!"
+                                );
+
+                                return;
+                            }
 
                             patientsData.add(pg.getPatient());
                             patientIconsData.addPatient(pg.getPatient(), pg.getPatientIcon());
