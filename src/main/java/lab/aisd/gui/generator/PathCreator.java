@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.generator;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;

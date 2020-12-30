@@ -1,5 +1,8 @@
-package lab.aisd.gui;
+package lab.aisd.gui.collection;
 
+import lab.aisd.gui.model.BuildingIcon;
+import lab.aisd.gui.model.HospitalIcon;
+import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.model.Building;
 import lab.aisd.model.Hospital;
 

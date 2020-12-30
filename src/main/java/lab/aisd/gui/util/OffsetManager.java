@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.util;
 
 import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
