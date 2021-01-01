@@ -1,8 +1,9 @@
 package lab.aisd.model;
 
+import static java.lang.Math.abs;
 import java.util.Objects;
 
-public class Coordinate {
+public class Coordinate implements Comparable<Coordinate> {
     private int x;
     private int y;
 
@@ -52,4 +53,44 @@ public class Coordinate {
                 ", y=" + y +
                 '}';
     }
+
+    public Coordinate plus(Coordinate p){
+        return new Coordinate (x + p.x, y + p.y);
+    }
+
+    public Coordinate minus(Coordinate p){
+        return new Coordinate (x - p.x, y - p.y);
+    }
+
+    int cross(Coordinate p){
+        return x * p.y - y * p.x;
+    }
+
+    int dot(Coordinate p){
+        return x * p.x + y * p.y;
+    }
+
+    int cross(Coordinate a, Coordinate b){
+        return (a.minus(this)).cross((b.minus(this)));
+    }
+
+    int dot(Coordinate a, Coordinate b){
+        return a.minus(this).dot(b.minus(this));
+    }
+
+    int sqrLen(){
+        return this.dot(this);
+    }
+
+    @Override
+    public int compareTo(Coordinate p) {
+        return (x < p.x || (x == p.x && y < p.y)) ? -1 : ((x == p.x && y == p.y) ? 0 : 1);
+    }
+
+    boolean pointInTriangle(Coordinate a, Coordinate b, Coordinate c){
+        int s1 = abs(a.cross(c, b));
+        int s2 = abs(this.cross(a, b)) + abs(this.cross(b, c)) + abs(this.cross(c, a));
+        return s1 == s2;
+    }
+
 }
