@@ -26,10 +26,12 @@ import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;
 import lab.aisd.util.input.InputData;
 import lab.aisd.util.input.InputFileReader;
+import lab.aisd.algorithm.intersections.intersectionFinder;
 
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+
 
 public class MapController implements Initializable {
 
@@ -222,6 +224,26 @@ public class MapController implements Initializable {
         }
 
         System.out.println("Calc started");
+        
+        try {
+            //OFFSET!!!!
+            new intersectionFinder().intersectionFinder(mapData);
+
+        } catch (IndexOutOfBoundsException | OutOfMemoryError e) {
+            //better to add dialog box than print
+            System.out.println("Intersection finder failed!");
+
+        }
+        
+        //test to checki if it works 
+        mapData.getPaths().forEach((x) -> {
+            System.out.println(x.getId() + " | " + x.getFirstHospitalID() + " -> " + x.getSecondHospitalID() + " | " + x.getDistance());
+        });
+        System.out.println("\n");
+        mapData.getHospitals().forEach((x) -> {
+            Coordinate n = x.getPosition();
+            System.out.println(x.getId() + " | " + x.getName() + " | " + n.getX() + " x " + n.getY());
+        });
     }
 
     private void showDataNotValidError() {
