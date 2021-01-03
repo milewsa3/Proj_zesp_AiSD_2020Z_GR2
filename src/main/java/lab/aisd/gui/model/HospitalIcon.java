@@ -1,6 +1,4 @@
-package lab.aisd.gui;
-
-import lab.aisd.model.Hospital;
+package lab.aisd.gui.model;
 
 public class HospitalIcon extends MapObjectIcon {
 

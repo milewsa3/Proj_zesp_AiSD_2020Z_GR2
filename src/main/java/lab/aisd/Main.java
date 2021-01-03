@@ -2,6 +2,7 @@ package lab.aisd;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lab.aisd.algorithm.border.ConvexHull;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.MusicPlayer;
 import lab.aisd.util.StageManager;

@@ -1,4 +1,4 @@
-package lab.aisd.gui;
+package lab.aisd.gui.util;
 
 import javafx.scene.Node;
 import lab.aisd.model.Coordinate;
@@ -87,7 +87,7 @@ public class Scaler {
     }
 
     public int getPatientHeight(int numOfObjs) {
-        return getHospitalHeight(numOfObjs);
+        return getHospitalHeight(numOfObjs) - 6;
     }
 
     public double getWidthRatio() {
