@@ -18,6 +18,15 @@ public class intersectionFinder {
         List<Path> paths = inputData.getPaths();
         List<Hospital> hosps = inputData.getHospitals();
 
+        if(paths == null || hosps == null){
+            throw new NullPointerException("Either hospitals or paths are null");
+        }
+        
+        if(hosps.size() < 4 || paths.size() < 2){
+            throw new NullPointerException("Too few hospitals or paths");
+        }
+        
+        
         int index = 0;
         int maximumSizeOfHosps = 0;
 
@@ -102,8 +111,8 @@ public class intersectionFinder {
                         inLineCheck[thirdID][fourthID] = 1;
 
                         //adding new roads with intersection and new distances
-                        addNewPathsWithIntersections(paths, hosps, firstID, secondID, intersectionID, index);
-                        addNewPathsWithIntersections(paths, hosps, thirdID, fourthID, intersectionID, i);
+                        addNewPaths(paths, hosps, firstID, secondID, intersectionID, index);
+                        addNewPaths(paths, hosps, thirdID, fourthID, intersectionID, i);
 
                         //removing old roads
                         removeOldPaths(paths, index, i);
@@ -152,7 +161,7 @@ public class intersectionFinder {
         return Math.sqrt(Math.pow(point2.getY() - point1.getY(), 2) + Math.pow(point2.getX() - point1.getX(), 2));
     }
 
-    private void addNewPathsWithIntersections(List<Path> paths, List<Hospital> hosps, int firstID, int secondID, int intersectionID, int index) {
+    private void addNewPaths(List<Path> paths, List<Hospital> hosps, int firstID, int secondID, int intersectionID, int index) {
         int newPathId = paths.size() + 1;
         double distanceMultiplier = distanceMultipplier(hosps.get(firstID), hosps.get(secondID), hosps.get(intersectionID - 1));
 
@@ -189,10 +198,30 @@ public class intersectionFinder {
     }
 
     private boolean safetyLoopStop(int actualSizeOfHosps, int maximumSizeOfHosps) {
-        return (actualSizeOfHosps > maximumSizeOfHosps) ? true : false;
+        return (actualSizeOfHosps > maximumSizeOfHosps);
     }
 
     private int calculateMaxSizeOfHosps(int size) {
         return size + size * (size - 1) * (size - 2) * (size - 3) / 24;
+    }
+
+/*
+            ACCESS METHODS FOR TESTS
+*/
+
+    public void testPreperePaths(List<Path> paths) {
+        preperePaths(paths);
+    }
+    
+    public double testCalculateDistanceBetweenPoints(Coordinate point1, Coordinate point2){
+        return calculateDistanceBetweenPoints(point1, point2);
+    }
+
+    public double testDistanceMultipplier(Hospital point1, Hospital point2, Hospital intersection) {
+        return distanceMultipplier(point1, point2, intersection);
+    }
+    
+    public double[] testIntersectionPoint(Coordinate point1, Coordinate point2, Coordinate point3, Coordinate point4){
+        return intersectionPoint(point1, point2, point3, point4);
     }
 }
