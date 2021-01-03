@@ -38,6 +38,8 @@ import lab.aisd.algorithm.intersections.intersectionFinder;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MapController implements Initializable {
@@ -277,11 +279,10 @@ public class MapController implements Initializable {
             //OFFSET!!!!
             new intersectionFinder().intersectionFinder(mapData);
 
-        } catch (IndexOutOfBoundsException | OutOfMemoryError e) {
+        } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
             //better to add dialog box than print
             System.out.println("Intersection finder failed!");
-
-        }
+        } 
         
         //test to checki if it works 
         mapData.getPaths().forEach((x) -> {
