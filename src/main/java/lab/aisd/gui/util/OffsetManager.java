@@ -1,5 +1,8 @@
 package lab.aisd.gui.util;
 
+import lab.aisd.animation.DrivingTransition;
+import lab.aisd.gui.model.AmbulanceIcon;
+import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
 
@@ -59,5 +62,16 @@ public class OffsetManager {
         for (Patient p : patients) {
             offset(p);
         }
+    }
+
+    public static void offsetAmbulanceForTransition(MapObjectIcon ambulance) {
+        double w = -ambulance.getPrefWidth()/2;
+        double h = -ambulance.getPrefHeight()/2;
+
+        ambulance.setLayoutX(ambulance.getLayoutX() + ambulance.getTranslateX() - w);
+        ambulance.setLayoutY(ambulance.getLayoutY() + ambulance.getTranslateY() - h);
+
+        ambulance.setTranslateX(w);
+        ambulance.setTranslateY(h);
     }
 }

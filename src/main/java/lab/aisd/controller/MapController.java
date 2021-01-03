@@ -26,9 +26,12 @@ import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.generator.MapGenerator;
 import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
+import lab.aisd.gui.model.AmbulanceIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
+import lab.aisd.log.Job;
 import lab.aisd.log.PatientTransportJob;
+import lab.aisd.log.PickUpPatientJob;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;
@@ -271,20 +274,36 @@ public class MapController implements Initializable {
         }
 
         System.out.println("Calc started");
-        PatientTransportJob job = new PatientTransportJob();
-        job.setAction(
-                patientIconsData.getPatient(patientsData.get(0)),
-                visualData.getHospital(mapData.getHospitals().get(0)),
+
+        MapObjectIcon ambulance = new AmbulanceIcon((int)(-(mainAreaBox.getWidth() - mainArea.getWidth())/2),
+                (int)patientIconsData.getPatient(patientsData.get(0)).getLayoutY());
+        mapGenerator.positionIconToBeInTheCenterOfPoint(ambulance);
+        addObjectToTheMap(ambulance);
+
+        PickUpPatientJob pickUp = new PickUpPatientJob();
+        pickUp.setAction(ambulance, patientIconsData.getPatient(patientsData.get(0)));
+        pickUp.setDescription(patientsData.get(0));
+
+        PatientTransportJob delivery = new PatientTransportJob();
+        delivery.setAction(
+                ambulance,
+                ambulance,
                 visualData.getHospital(mapData.getHospitals().get(1))
         );
-        job.setDescription(
+        delivery.setDescription(
                 patientsData.get(0),
-                mapData.getHospitals().get(0),
                 mapData.getHospitals().get(1)
         );
 
-        job.commit();
-        System.out.println(job.getDescription());
+        pickUp.setOnFinished(e -> {
+            System.out.println(pickUp.getDescription());
+            delivery.commit();
+        });
+
+        delivery.setOnFinished(e -> System.out.println(delivery.getDescription()));
+
+        new Thread(pickUp::commit).start();
+        //pickUp.commit();
     }
 
     private void showDataNotValidError() {

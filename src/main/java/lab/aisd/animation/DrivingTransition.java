@@ -37,4 +37,12 @@ public class DrivingTransition {
     public final void setOnFinished(EventHandler<ActionEvent> value) {
         tt.setOnFinished(value);
     }
+
+    public double getByX() {
+        return tt.getByX();
+    }
+
+    public double getByY() {
+        return tt.getByY();
+    }
 }
