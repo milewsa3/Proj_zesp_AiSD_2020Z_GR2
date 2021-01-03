@@ -42,4 +42,12 @@ public class MapObject {
     public int hashCode() {
         return Objects.hash(id, position);
     }
+
+    @Override
+    public String toString() {
+        return "MapObject{" +
+                "id=" + id +
+                ", position=" + position +
+                '}';
+    }
 }
