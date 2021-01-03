@@ -12,20 +12,19 @@ public class intersectionFinder {
         - unit tests
         --remove comments
      */
-
     public void intersectionFinder(InputData inputData) {
-        
+
         //get paths and hospitals lists
         List<Path> paths = inputData.getPaths();
         List<Hospital> hosps = inputData.getHospitals();
-        
+
         int index = 0;
         int maximumSizeOfHosps = 0;
-        
+
         List<Path> pathsCopy = new ArrayList<>(paths);
         List<Hospital> hospitalCopy = new ArrayList<>(hosps);
         int[][] inLineCheck = null;
-        
+
         try {
             maximumSizeOfHosps = calculateMaxSizeOfHosps(hosps.size());
             inLineCheck = new int[maximumSizeOfHosps][maximumSizeOfHosps];
@@ -38,7 +37,7 @@ public class intersectionFinder {
         preperePaths(paths);
 
         while (index < paths.size()) {
-            //if loop is infinity: stop if size is bigger than maximum possible number of hosps + intersections
+            //if loop is infinity: stop when size is bigger than maximum possible number of hosps + intersections
             if (safetyLoopStop(hosps.size(), maximumSizeOfHosps)) {
                 //System.out.println("XD");
                 paths.clear();
@@ -85,7 +84,7 @@ public class intersectionFinder {
                         if (inLineCheck[firstID][secondID] == 1 || inLineCheck[firstID][thirdID] == 1 || inLineCheck[firstID][fourthID] == 1) {
                             continue;
                         }
-                        
+
                         //adding intersection 
                         int intersectionX = (int) Math.round(intersectionCoords[0]);
                         int intersectionY = (int) Math.round(intersectionCoords[1]);
@@ -93,7 +92,7 @@ public class intersectionFinder {
                         int intersectionID = hosps.size() + 1;
 
                         hosps.add(new Hospital(intersectionID, "INTER", new Coordinate(intersectionX, intersectionY), 0, 0));
-                        //test array neccessery to work
+                        //test arrays neccessery to work
                         intersetionPointCheck[firstID][intersectionID - 1] = 1;
                         intersetionPointCheck[secondID][intersectionID - 1] = 1;
                         intersetionPointCheck[thirdID][intersectionID - 1] = 1;
@@ -103,31 +102,11 @@ public class intersectionFinder {
                         inLineCheck[thirdID][fourthID] = 1;
 
                         //adding new roads with intersection and new distances
-                        int newPathId = paths.size() + 1;
-                        double distanceMultiplier = distanceMultipplier(hosps.get(firstID), hosps.get(secondID), hosps.get(intersectionID - 1));
-
-                        int distance = 0;
-                        distance = (int) Math.round(paths.get(index).getDistance() * distanceMultiplier);
-
-                        paths.add(new Path(newPathId, firstID + 1, intersectionID, distance));
-                        paths.add(new Path(newPathId + 1, secondID + 1, intersectionID, Math.abs(distance - paths.get(index).getDistance())));
-
-                        distanceMultiplier = distanceMultipplier(hosps.get(thirdID), hosps.get(fourthID), hosps.get(intersectionID - 1));
-
-                        distance = (int) Math.round(paths.get(i).getDistance() * distanceMultiplier);
-
-                        paths.add(new Path(newPathId + 2, thirdID + 1, intersectionID, distance));
-                        paths.add(new Path(newPathId + 3, fourthID + 1, intersectionID, Math.abs(distance - paths.get(i).getDistance())));
+                        addNewPathsWithIntersections(paths, hosps, firstID, secondID, intersectionID, index);
+                        addNewPathsWithIntersections(paths, hosps, thirdID, fourthID, intersectionID, i);
 
                         //removing old roads
-                        int oldId = paths.get(index).getId();
-                        paths.set(index, new Path(oldId, 0, 0, 0));
-
-                        oldId = paths.get(i).getId();
-                        paths.set(i, new Path(oldId, 0, 0, 0));
-
-                        intersectionCoords = null;
-
+                        removeOldPaths(paths, index, i);
                     }
                 }
             }
@@ -171,6 +150,25 @@ public class intersectionFinder {
 
     private double calculateDistanceBetweenPoints(Coordinate point1, Coordinate point2) {
         return Math.sqrt(Math.pow(point2.getY() - point1.getY(), 2) + Math.pow(point2.getX() - point1.getX(), 2));
+    }
+
+    private void addNewPathsWithIntersections(List<Path> paths, List<Hospital> hosps, int firstID, int secondID, int intersectionID, int index) {
+        int newPathId = paths.size() + 1;
+        double distanceMultiplier = distanceMultipplier(hosps.get(firstID), hosps.get(secondID), hosps.get(intersectionID - 1));
+
+        int distance = 0;
+        distance = (int) Math.round(paths.get(index).getDistance() * distanceMultiplier);
+
+        paths.add(new Path(newPathId, firstID + 1, intersectionID, distance));
+        paths.add(new Path(newPathId + 1, secondID + 1, intersectionID, Math.abs(distance - paths.get(index).getDistance())));
+    }
+
+    private void removeOldPaths(List<Path> paths, int index1, int index2) {
+        int oldId = paths.get(index1).getId();
+        paths.set(index1, new Path(oldId, 0, 0, 0));
+
+        oldId = paths.get(index2).getId();
+        paths.set(index2, new Path(oldId, 0, 0, 0));
     }
 
     private void preperePaths(List<Path> paths) {
