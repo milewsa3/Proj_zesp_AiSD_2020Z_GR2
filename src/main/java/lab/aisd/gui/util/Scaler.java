@@ -87,7 +87,7 @@ public class Scaler {
     }
 
     public int getPatientHeight(int numOfObjs) {
-        return getHospitalHeight(numOfObjs);
+        return getHospitalHeight(numOfObjs) - 6;
     }
 
     public double getWidthRatio() {

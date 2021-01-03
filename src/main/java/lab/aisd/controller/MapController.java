@@ -19,14 +19,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import lab.aisd.animation.FadeInTransition;
-import lab.aisd.gui.BoarderMarkerImpl;
-import lab.aisd.gui.BorderMarker;
+import lab.aisd.gui.converter.BoarderMarkerImpl;
+import lab.aisd.gui.converter.BorderMarker;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.generator.MapGenerator;
 import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
-import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
 import lab.aisd.model.*;
@@ -158,20 +157,32 @@ public class MapController implements Initializable {
         if (borderPoints.size() == 0)
             return;
 
-        MapObjectIcon previous = getProperIcon(borderPoints.get(0));
-
         for (int i=1;i<borderPoints.size();i++) {
-            MapObjectIcon icon = getProperIcon(borderPoints.get(i));
-            PathCreator.connect(previous, icon);
-            previous = icon;
+            createAndAddBorder(borderPoints.get(i-1), borderPoints.get(i));
         }
+
+        createAndAddBorder(borderPoints.get(borderPoints.size()-1), borderPoints.get(0));
+    }
+
+    private void createAndAddBorder(MapObject from, MapObject to) {
+        Line border = PathCreator.connect(
+                getProperIcon(from),
+                getProperIcon(to),
+                Color.RED,
+                8
+        );
+
+        addObjectToTheMap(border);
+        border.toBack();
     }
 
     private MapObjectIcon getProperIcon(MapObject obj) {
         if (obj instanceof Hospital) {
             return visualData.getHospital((Hospital) obj);
-        } else {
+        } else if (obj instanceof Building){
             return visualData.getBuilding((Building) obj);
+        } else {
+            throw new IllegalArgumentException(obj + " is not an instance of Hospital or Building");
         }
     }
 
