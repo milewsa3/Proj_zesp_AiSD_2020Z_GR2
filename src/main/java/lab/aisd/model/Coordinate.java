@@ -62,23 +62,23 @@ public class Coordinate implements Comparable<Coordinate> {
         return new Coordinate (x - p.x, y - p.y);
     }
 
-    int cross(Coordinate p){
+    public int cross(Coordinate p){
         return x * p.y - y * p.x;
     }
 
-    int dot(Coordinate p){
+    public int dot(Coordinate p){
         return x * p.x + y * p.y;
     }
 
-    int cross(Coordinate a, Coordinate b){
+    public int cross(Coordinate a, Coordinate b){
         return (a.minus(this)).cross((b.minus(this)));
     }
 
-    int dot(Coordinate a, Coordinate b){
+    public int dot(Coordinate a, Coordinate b){
         return a.minus(this).dot(b.minus(this));
     }
 
-    int sqrLen(){
+    public int sqrLen(){
         return this.dot(this);
     }
 
@@ -87,7 +87,7 @@ public class Coordinate implements Comparable<Coordinate> {
         return (x < p.x || (x == p.x && y < p.y)) ? -1 : ((x == p.x && y == p.y) ? 0 : 1);
     }
 
-    boolean pointInTriangle(Coordinate a, Coordinate b, Coordinate c){
+    public boolean pointInTriangle(Coordinate a, Coordinate b, Coordinate c){
         int s1 = abs(a.cross(c, b));
         int s2 = abs(this.cross(a, b)) + abs(this.cross(b, c)) + abs(this.cross(c, a));
         return s1 == s2;

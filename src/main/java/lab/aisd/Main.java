@@ -2,12 +2,17 @@ package lab.aisd;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lab.aisd.algorithm.model.ConvexHull;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.MusicPlayer;
 import lab.aisd.util.StageManager;
 
 public class Main extends Application {
     public static void main(String[] args) {
+        //testing if ConvexHull works
+        ConvexHull xd = new ConvexHull();
+        xd.test();
+        //and it does
         launch(args);
     }
 
