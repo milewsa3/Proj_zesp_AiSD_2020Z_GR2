@@ -28,6 +28,7 @@ import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
+import lab.aisd.log.PatientTransportJob;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;
@@ -270,6 +271,20 @@ public class MapController implements Initializable {
         }
 
         System.out.println("Calc started");
+        PatientTransportJob job = new PatientTransportJob();
+        job.setAction(
+                patientIconsData.getPatient(patientsData.get(0)),
+                visualData.getHospital(mapData.getHospitals().get(0)),
+                visualData.getHospital(mapData.getHospitals().get(1))
+        );
+        job.setDescription(
+                patientsData.get(0),
+                mapData.getHospitals().get(0),
+                mapData.getHospitals().get(1)
+        );
+
+        job.commit();
+        System.out.println(job.getDescription());
     }
 
     private void showDataNotValidError() {

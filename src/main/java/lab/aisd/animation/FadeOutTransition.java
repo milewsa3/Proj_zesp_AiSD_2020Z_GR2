@@ -8,20 +8,20 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
-public class FadeInTransition {
+public class FadeOutTransition {
     private FadeTransition ft;
 
-    public FadeInTransition(Duration duration, Node node) {
+    public FadeOutTransition(Duration duration, Node node) {
         ft = new FadeTransition(duration, node);
-        ft.setFromValue(0.0);
-        ft.setToValue(1.0);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
     }
 
-    public FadeInTransition(Node node) {
+    public FadeOutTransition(Node node) {
         Random random = new Random();
         ft = new FadeTransition(Duration.millis(250 + random.nextInt(1000)), node);
-        ft.setFromValue(0.0);
-        ft.setToValue(1.0);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
     }
 
     public void play() {
