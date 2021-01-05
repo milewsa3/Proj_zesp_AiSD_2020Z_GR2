@@ -26,12 +26,9 @@ import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.generator.MapGenerator;
 import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
-import lab.aisd.gui.model.AmbulanceIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
-import lab.aisd.log.Job;
-import lab.aisd.log.PatientTransportJob;
-import lab.aisd.log.PickUpPatientJob;
+import lab.aisd.log.*;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;
@@ -53,7 +50,6 @@ public class MapController implements Initializable {
 
     private OffsetManager offsetManager;
     private MapGenerator mapGenerator;
-
 
 
     @FXML
@@ -244,7 +240,7 @@ public class MapController implements Initializable {
 
     @FXML
     void showAbout(ActionEvent event) {
-        StageManager.getInstance().openNewScene(FxmlView.ABOUT);
+        StageManager.getInstance().openNewFocusedWindow(FxmlView.ABOUT);
     }
 
     @FXML
@@ -254,12 +250,12 @@ public class MapController implements Initializable {
 
     @FXML
     void openConfig(ActionEvent event) {
-        StageManager.getInstance().openNewScene(FxmlView.CONFIG);
+        StageManager.getInstance().openNewFocusedWindow(FxmlView.CONFIG);
     }
 
     @FXML
     void openSettings(ActionEvent event) {
-        StageManager.getInstance().openNewScene(FxmlView.SETTINGS);
+        StageManager.getInstance().openNewFocusedWindow(FxmlView.SETTINGS);
     }
 
     @FXML
@@ -275,35 +271,27 @@ public class MapController implements Initializable {
 
         System.out.println("Calc started");
 
-        MapObjectIcon ambulance = new AmbulanceIcon((int)(-(mainAreaBox.getWidth() - mainArea.getWidth())/2),
-                (int)patientIconsData.getPatient(patientsData.get(0)).getLayoutY());
-        mapGenerator.positionIconToBeInTheCenterOfPoint(ambulance);
+        Employer employer = new Employer();
+
+        AmbulanceFactory ambulanceFactory = new AmbulanceFactory(mainArea, mainAreaBox, patientIconsData);
+        JobFactory jobFactory = new JobFactory(visualData, patientIconsData);
+
+        MapObjectIcon ambulance = ambulanceFactory.createAmbulanceForPatient(patientsData.get(0));
         addObjectToTheMap(ambulance);
+        Job pickUp = jobFactory.createPickUpJob(ambulance, patientsData.get(0));
+        Job driveToHospital = jobFactory.createPatientTransportJob(ambulance,
+                patientsData.get(0), mapData.getHospitals().get(0));
+        Job driveFromHospitalToHospital = jobFactory.createPatientTransportJob(ambulance,
+                patientsData.get(0), mapData.getHospitals().get(0), mapData.getHospitals().get(1));
+        employer.add(pickUp, driveToHospital, driveFromHospitalToHospital);
 
-        PickUpPatientJob pickUp = new PickUpPatientJob();
-        pickUp.setAction(ambulance, patientIconsData.getPatient(patientsData.get(0)));
-        pickUp.setDescription(patientsData.get(0));
+        //new Thread(employer::startJobs).start();
 
-        PatientTransportJob delivery = new PatientTransportJob();
-        delivery.setAction(
-                ambulance,
-                ambulance,
-                visualData.getHospital(mapData.getHospitals().get(1))
-        );
-        delivery.setDescription(
-                patientsData.get(0),
-                mapData.getHospitals().get(1)
-        );
+        StageManager.getInstance().openNewNotFocusedWindow(FxmlView.LOG);
+        new Thread(() -> {
+            Logger.getInstance().add(employer.getAllLogs());
+        }).start();
 
-        pickUp.setOnFinished(e -> {
-            System.out.println(pickUp.getDescription());
-            delivery.commit();
-        });
-
-        delivery.setOnFinished(e -> System.out.println(delivery.getDescription()));
-
-        new Thread(pickUp::commit).start();
-        //pickUp.commit();
     }
 
     private void showDataNotValidError() {

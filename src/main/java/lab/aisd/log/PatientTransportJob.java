@@ -1,5 +1,7 @@
 package lab.aisd.log;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
@@ -18,17 +20,18 @@ public class PatientTransportJob extends Job {
         super();
     }
 
-    public PatientTransportJob(MapObjectIcon ambulance, HospitalIcon from, HospitalIcon to) {
+    public PatientTransportJob(MapObjectIcon ambulance, MapObjectIcon from, MapObjectIcon to) {
         this();
-
         setAction(ambulance, from, to);
     }
 
     public void setAction(MapObjectIcon ambulance, MapObjectIcon from, MapObjectIcon to) {
         Action action = () -> {
-            FadeInTransition fadeIn = new FadeInTransition(Duration.millis(500), ambulance);
-            DrivingTransition drive = new DrivingTransition(ambulance, from, to);
-            FadeOutTransition fadeOut = new FadeOutTransition(Duration.millis(500), ambulance);
+            double speed = Job.getSpeed();
+
+            FadeInTransition fadeIn = new FadeInTransition(Duration.millis(speed), ambulance);
+            DrivingTransition drive = new DrivingTransition(Duration.millis(speed * 2), ambulance, from, to);
+            FadeOutTransition fadeOut = new FadeOutTransition(Duration.millis(speed), ambulance);
 
             fadeIn.setOnFinished(event -> drive.play());
             drive.setOnFinished(event ->  {

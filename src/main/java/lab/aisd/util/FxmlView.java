@@ -48,6 +48,17 @@ public enum FxmlView {
             return "configuration.fxml";
         }
     },
+    LOG {
+        @Override
+        public String getTitle() {
+            return "Log";
+        }
+
+        @Override
+        public String getFxmlFile() {
+            return "log.fxml";
+        }
+    },
     ABOUT {
         @Override
         public String getTitle() {

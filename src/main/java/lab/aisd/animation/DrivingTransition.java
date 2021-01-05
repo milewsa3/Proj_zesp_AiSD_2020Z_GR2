@@ -25,7 +25,6 @@ public class DrivingTransition {
     }
 
     public DrivingTransition(Node node, MapObjectIcon from, MapObjectIcon to) {
-        Random random = new Random();
         tt = new TranslateTransition(Duration.millis(2000), node);
         setFromAndTo(from, to);
     }

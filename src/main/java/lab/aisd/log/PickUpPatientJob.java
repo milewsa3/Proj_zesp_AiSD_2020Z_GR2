@@ -11,21 +11,23 @@ import lab.aisd.model.Hospital;
 import lab.aisd.model.Patient;
 
 public class PickUpPatientJob extends Job{
+
     public PickUpPatientJob() {
         super();
     }
 
     public PickUpPatientJob(MapObjectIcon ambulance, MapObjectIcon patient) {
         this();
-
         setAction(ambulance, patient);
     }
 
     public void setAction(MapObjectIcon ambulance, MapObjectIcon patient) {
         Action action = () -> {
-            DrivingTransition drive = new DrivingTransition(ambulance, ambulance, patient);
-            FadeOutTransition fadeOutPatient = new FadeOutTransition(Duration.millis(500), patient);
-            FadeOutTransition fadeOutAmbulance = new FadeOutTransition(Duration.millis(500), ambulance);
+            double speed = Job.getSpeed();
+
+            DrivingTransition drive = new DrivingTransition(Duration.millis(speed * 2), ambulance, ambulance, patient);
+            FadeOutTransition fadeOutPatient = new FadeOutTransition(Duration.millis(speed), patient);
+            FadeOutTransition fadeOutAmbulance = new FadeOutTransition(Duration.millis(speed), ambulance);
 
             drive.setOnFinished(event -> {
                 OffsetManager.offsetAmbulanceForTransition(ambulance);

@@ -1,19 +1,18 @@
 package lab.aisd.log;
 
 import javafx.util.Duration;
-import lab.aisd.animation.DrivingTransition;
 import lab.aisd.animation.FadeOutTransition;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.model.Patient;
 
 public class LeavePatientJob extends Job {
+
     public LeavePatientJob() {
         super();
     }
 
-    public LeavePatientJob(MapObjectIcon ambulance, MapObjectIcon patient) {
+    public LeavePatientJob(MapObjectIcon ambulance) {
         this();
-
         setAction(ambulance);
     }
 

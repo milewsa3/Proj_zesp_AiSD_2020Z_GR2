@@ -1,21 +1,19 @@
 package lab.aisd.log;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import static com.sun.javafx.animation.TickCalculation.fromDuration;
 
 public class Job {
     private Action action;
     private String description;
 
-    private BooleanProperty finished = new SimpleBooleanProperty(false);
+    private final BooleanProperty finished = new SimpleBooleanProperty(false);
+    protected static final double DEFAULT_SPEED = 500;
+    private static double speedScale = 1.0;
 
     public Job() {
         action = () -> System.out.println("Not implemented");
@@ -74,6 +72,19 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static void setSpeedScale(double speedScale) {
+        if (speedScale > 0 && speedScale < 2)
+            Job.speedScale = speedScale;
+    }
+
+    public static double getSpeedScale() {
+        return speedScale;
+    }
+
+    public static double getSpeed() {
+        return DEFAULT_SPEED / speedScale;
     }
 }
 

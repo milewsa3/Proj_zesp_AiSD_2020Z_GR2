@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.aisd.controller.ConfigurationController">
    <children>
       <Label layoutX="63.0" layoutY="33.0" text="Configuration">
@@ -45,7 +44,7 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <Slider fx:id="speedSlider" maxWidth="-Infinity" prefHeight="14.0" prefWidth="252.0" />
+            <Slider fx:id="speedSlider" blockIncrement="0.25" majorTickUnit="1.0" max="1.75" maxWidth="-Infinity" min="0.25" prefHeight="14.0" prefWidth="252.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
          </children>
       </VBox>
    </children>

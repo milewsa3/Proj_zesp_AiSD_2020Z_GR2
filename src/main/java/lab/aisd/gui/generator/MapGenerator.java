@@ -82,7 +82,7 @@ public class MapGenerator {
         return icon;
     }
 
-    public void positionIconToBeInTheCenterOfPoint(MapObjectIcon icon) {
+    private void positionIconToBeInTheCenterOfPoint(MapObjectIcon icon) {
         icon.setTranslateX(-icon.getPrefWidth()/2);
         icon.setTranslateY(-icon.getPrefHeight()/2);
     }

@@ -49,7 +49,7 @@ public class StageManager {
         primaryStage.setResizable(value);
     }
 
-    public void openNewScene(final FxmlView view) {
+    public void openNewFocusedWindow(final FxmlView view) {
         Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
         Stage window = new Stage();
         Scene scene = new Scene(viewRootNodeHierarchy);
@@ -57,6 +57,15 @@ public class StageManager {
         window.setTitle(view.getTitle());
         window.setScene(scene);
         window.showAndWait();
+    }
+
+    public void openNewNotFocusedWindow(final FxmlView view) {
+        Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
+        Stage window = new Stage();
+        Scene scene = new Scene(viewRootNodeHierarchy);
+        window.setTitle(view.getTitle());
+        window.setScene(scene);
+        window.show();
     }
 
     public void switchScene(final FxmlView view) {
