@@ -100,7 +100,7 @@ public class IntersectionFinder {
 
                         int intersectionID = hosps.size() + 1;
 
-                        hosps.add(new Hospital(intersectionID, "INTER", new Coordinate(intersectionX, intersectionY), 0, 0));
+                        hosps.add(new Hospital(intersectionID, "INTERSECTION", new Coordinate(intersectionX, intersectionY), 0, 0));
                         //test arrays neccessery to work
                         intersetionPointCheck[firstID][intersectionID - 1] = 1;
                         intersetionPointCheck[secondID][intersectionID - 1] = 1;
