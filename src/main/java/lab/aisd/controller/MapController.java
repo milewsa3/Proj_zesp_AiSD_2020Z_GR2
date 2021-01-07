@@ -39,7 +39,8 @@ import java.net.URL;
 import java.util.*;
 
 import lab.aisd.algorithm.intersections.IntersectionFinder;
-
+import lab.aisd.algorithm.model.Graph;
+import lab.aisd.algorithm.shortest_path.*;
 
 public class MapController implements Initializable {
 
@@ -280,10 +281,11 @@ public class MapController implements Initializable {
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
             //better to add dialog box than print
             showIntersectionsFailed();
-            System.out.println("Intersection finder failed!");
+            //System.out.println("Intersection finder failed!");
         } 
         
         //test to checki if it works 
+        /*
         mapData.getPaths().forEach((x) -> {
             System.out.println(x.getId() + " | " + x.getFirstHospitalID() + " -> " + x.getSecondHospitalID() + " | " + x.getDistance());
         });
@@ -292,6 +294,9 @@ public class MapController implements Initializable {
             Coordinate n = x.getPosition();
             System.out.println(x.getId() + " | " + x.getName() + " | " + n.getX() + " x " + n.getY());
         });
+        */
+        Graph graph = new CreateGraph().createGraph(mapData);
+        System.out.println("done");
     }
 
     private void showIntersectionsFailed(){
