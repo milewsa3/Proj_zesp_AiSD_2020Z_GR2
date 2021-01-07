@@ -5,7 +5,7 @@ import java.util.List;
 import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
 
-public class intersectionFinder {
+public class IntersectionFinder {
 
     /*
         TO DO:

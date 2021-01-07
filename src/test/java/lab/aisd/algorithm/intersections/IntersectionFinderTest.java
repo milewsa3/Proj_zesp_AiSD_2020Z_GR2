@@ -7,8 +7,8 @@ import lab.aisd.util.input.InputData;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class intersectionFinderTest {
-    private final intersectionFinder finder = new intersectionFinder();
+public class IntersectionFinderTest {
+    private final IntersectionFinder finder = new IntersectionFinder();
 
     @Test
     public void testShouldThrowNullPointerExceptionIfDataIsNull() {
