@@ -29,6 +29,10 @@ public class CreateGraph {
             int secondID = path.getSecondHospitalID() - 1;
             int distance = path.getDistance();
             
+            if(firstID < 0 || secondID < 0){
+                //path replaced by intersection
+                continue;
+            }
             graph.addEdge(nodes.get(firstID), nodes.get(secondID), distance);
         }
         
