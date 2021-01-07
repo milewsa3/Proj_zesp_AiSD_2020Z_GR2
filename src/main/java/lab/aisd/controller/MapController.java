@@ -38,6 +38,7 @@ import lab.aisd.util.input.InputFileReader;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import lab.aisd.algorithm.intersections.intersectionFinder;
 
 public class MapController implements Initializable {
 
@@ -270,6 +271,25 @@ public class MapController implements Initializable {
         }
 
         //Start calculations
+        
+        try {
+            //OFFSET!!!!
+            new intersectionFinder().intersectionFinder(mapData);
+
+        } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
+            //better to add dialog box than print
+            System.out.println("Intersection finder failed!");
+        } 
+        
+        //test to checki if it works 
+        mapData.getPaths().forEach((x) -> {
+            System.out.println(x.getId() + " | " + x.getFirstHospitalID() + " -> " + x.getSecondHospitalID() + " | " + x.getDistance());
+        });
+        System.out.println("\n");
+        mapData.getHospitals().forEach((x) -> {
+            Coordinate n = x.getPosition();
+            System.out.println(x.getId() + " | " + x.getName() + " | " + n.getX() + " x " + n.getY());
+        });
     }
 
     private void showDataNotValidError() {
