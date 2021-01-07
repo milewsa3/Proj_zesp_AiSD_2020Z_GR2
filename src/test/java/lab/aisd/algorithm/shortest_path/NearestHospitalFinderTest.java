@@ -20,11 +20,11 @@ class NearestHospitalFinderTest {
         graph = new Graph(6);
         List<Node> nodes = new ArrayList<>();
         int i = 0;
-        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(10,10), 0, 0), true, i));
-        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(100, 120), 0, 0), true, i));
-        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(120, 130), 0, 0), true, i));
-        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(10, 140), 0, 0), true, i));
-        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(140, 10), 0, 0), true, i));
+        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(10,10), 0, 0), true, i-1));
+        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(100, 120), 0, 0), true, i-1));
+        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(120, 130), 0, 0), true, i-1));
+        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(10, 140), 0, 0), true, i-1));
+        nodes.add(new Node(new Hospital(i++, "name", new Coordinate(140, 10), 0, 0), true, i-1));
 
         nodes.add(new Node(new Coordinate(69, 82), false, 5));
         graph.addEdge(nodes.get(0), nodes.get(3), 550);
