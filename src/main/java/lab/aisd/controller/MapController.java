@@ -269,29 +269,7 @@ public class MapController implements Initializable {
             return;
         }
 
-        System.out.println("Calc started");
-
-        Employer employer = new Employer();
-
-        AmbulanceFactory ambulanceFactory = new AmbulanceFactory(mainArea, mainAreaBox, patientIconsData);
-        JobFactory jobFactory = new JobFactory(visualData, patientIconsData);
-
-        MapObjectIcon ambulance = ambulanceFactory.createAmbulanceForPatient(patientsData.get(0));
-        addObjectToTheMap(ambulance);
-        Job pickUp = jobFactory.createPickUpJob(ambulance, patientsData.get(0));
-        Job driveToHospital = jobFactory.createPatientTransportJob(ambulance,
-                patientsData.get(0), mapData.getHospitals().get(0));
-        Job driveFromHospitalToHospital = jobFactory.createPatientTransportJob(ambulance,
-                patientsData.get(0), mapData.getHospitals().get(0), mapData.getHospitals().get(1));
-        employer.add(pickUp, driveToHospital, driveFromHospitalToHospital);
-
-        //new Thread(employer::startJobs).start();
-
-        StageManager.getInstance().openNewNotFocusedWindow(FxmlView.LOG);
-        new Thread(() -> {
-            Logger.getInstance().add(employer.getAllLogs());
-        }).start();
-
+        //Start calculations
     }
 
     private void showDataNotValidError() {
