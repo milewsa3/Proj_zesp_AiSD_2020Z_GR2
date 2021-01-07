@@ -39,7 +39,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
-import lab.aisd.algorithm.intersections.intersectionFinder;
+import lab.aisd.algorithm.intersections.IntersectionFinder;
 
 
 public class MapController implements Initializable {
@@ -276,7 +276,7 @@ public class MapController implements Initializable {
         
         try {
             //OFFSET!!!!
-            new intersectionFinder().intersectionFinder(mapData);
+            new IntersectionFinder().intersectionFinder(mapData);
 
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
             //better to add dialog box than print
