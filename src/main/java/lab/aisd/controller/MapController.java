@@ -38,7 +38,7 @@ import lab.aisd.util.input.InputFileReader;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
-import lab.aisd.algorithm.intersections.intersectionFinder;
+import lab.aisd.algorithm.intersections.IntersectionFinder;
 
 public class MapController implements Initializable {
 
@@ -274,10 +274,11 @@ public class MapController implements Initializable {
         
         try {
             //OFFSET!!!!
-            new intersectionFinder().intersectionFinder(mapData);
+            new IntersectionFinder().intersectionFinder(mapData);
 
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
             //better to add dialog box than print
+            showIntersectionsFailed();
             System.out.println("Intersection finder failed!");
         } 
         
@@ -292,6 +293,15 @@ public class MapController implements Initializable {
         });
     }
 
+    private void showIntersectionsFailed(){
+        StageManager.getInstance().showAlertScene(
+                Alert.AlertType.ERROR,
+                "Error",
+                "Intersection Finder Issue",
+                "Intersection finder failed. Coudn't calculate intersection points!"
+        );
+    }
+    
     private void showDataNotValidError() {
         StageManager.getInstance().showAlertScene(
                 Alert.AlertType.ERROR,
