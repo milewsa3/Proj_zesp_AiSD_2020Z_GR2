@@ -19,8 +19,11 @@ public class FloydWarshall {
         return dist;
     }
 
-    public Graph getGraph() {
-        return graph;
+    public void resetVisitedNodes() {
+        List<Node> nodes = graph.getAllNodes();
+        for(Node node: nodes){
+            node.setIsVisited(false);
+        }
     }
 
     public void setGraph(Graph graph) {
