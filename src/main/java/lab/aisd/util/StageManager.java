@@ -36,15 +36,6 @@ public class StageManager {
         return instance;
     }
 
-    public Optional<ButtonType> showAlertScene(Alert.AlertType type, String title, String header,String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-
-        return alert.showAndWait();
-    }
-
     public void setResizable(boolean value) {
         primaryStage.setResizable(value);
     }
