@@ -1,7 +1,7 @@
 package lab.aisd.algorithm.shortest_path;
 
 import lab.aisd.algorithm.model.Graph;
-import lab.aisd.algorithm.model.Node;
+import lab.aisd.algorithm.model.Vertex;
 import lab.aisd.model.Coordinate;
 
 import java.util.List;
@@ -13,15 +13,15 @@ public class NearestHospitalFinder {
         this.graph = graph;
     }
 
-    public Node findNearestHospitalByCoordinate(Coordinate patientCoordinate) {
+    public Vertex findNearestHospitalByCoordinate(Coordinate patientCoordinate) {
         double minDistance = Integer.MAX_VALUE;
-        Node nearestHospital = null;
-        List<Node> nodes = graph.getAllNodes();
-        for (Node node : nodes) {
-            double distance = calculateDistanceBetweenPoints(patientCoordinate, node.getPosition());
-            if (distance < minDistance && node.isHospital()) {
+        Vertex nearestHospital = null;
+        List<Vertex> vertices = graph.getAllNodes();
+        for (Vertex vertex : vertices) {
+            double distance = calculateDistanceBetweenPoints(patientCoordinate, vertex.getPosition());
+            if (distance < minDistance && vertex.isHospital()) {
                 minDistance = distance;
-                nearestHospital = node;
+                nearestHospital = vertex;
             }
         }
         if(nearestHospital != null){

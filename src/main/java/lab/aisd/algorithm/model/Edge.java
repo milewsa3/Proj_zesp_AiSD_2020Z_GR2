@@ -2,22 +2,22 @@ package lab.aisd.algorithm.model;
 
 public class Edge {
 
-    private final Node from;
-    private final Node to;
+    private final Vertex from;
+    private final Vertex to;
     private int distance;
 
-    public Edge(Node from, Node to, int distance) {
+    public Edge(Vertex from, Vertex to, int distance) {
         super();
         this.from = from;
         this.to = to;
         this.distance = distance;
     }
 
-    public Node getFrom() {
+    public Vertex getFrom() {
         return from;
     }
 
-    public Node getTo() {
+    public Vertex getTo() {
         return to;
     }
 

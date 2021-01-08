@@ -16,29 +16,29 @@ public class Graph implements Iterable<Edge> {
         }
     }
 
-    public void addEdge(Node from, Node to, int distance) {
+    public void addEdge(Vertex from, Vertex to, int distance) {
         int fromId = from.getOrderedId();
         int toId = to.getOrderedId();
         edges.get(fromId).add(new Edge(from, to, distance));
         edges.get(toId).add(new Edge(to, from, distance));
     }
 
-    public Node getNodeByOrderedId(int orderedId) {
+    public Vertex getNodeByOrderedId(int orderedId) {
         if (!edges.get(orderedId).isEmpty()) {
             return edges.get(orderedId).get(0).getFrom();
         }
         return null;
     }
 
-    public List<Node> getAllNodes() {
-        List<Node> nodes = new ArrayList<>();
+    public List<Vertex> getAllNodes() {
+        List<Vertex> vertices = new ArrayList<>();
         for (int i = 0; i < nodesNumber; i++) {
-            Node node = getNodeByOrderedId(i);
-            if (node != null) {
-                nodes.add(node);
+            Vertex vertex = getNodeByOrderedId(i);
+            if (vertex != null) {
+                vertices.add(vertex);
             }
         }
-        return nodes;
+        return vertices;
     }
 
     public int getNodesNumber() {

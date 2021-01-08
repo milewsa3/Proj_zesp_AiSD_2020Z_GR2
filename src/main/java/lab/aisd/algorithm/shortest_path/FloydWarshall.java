@@ -2,7 +2,7 @@ package lab.aisd.algorithm.shortest_path;
 
 import lab.aisd.algorithm.model.Edge;
 import lab.aisd.algorithm.model.Graph;
-import lab.aisd.algorithm.model.Node;
+import lab.aisd.algorithm.model.Vertex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +20,9 @@ public class FloydWarshall {
     }
 
     public void resetVisitedNodes() {
-        List<Node> nodes = graph.getAllNodes();
-        for(Node node: nodes){
-            node.setIsVisited(false);
+        List<Vertex> vertices = graph.getAllNodes();
+        for(Vertex vertex : vertices){
+            vertex.setIsVisited(false);
         }
     }
 
@@ -82,11 +82,11 @@ public class FloydWarshall {
         }
     }
 
-    public List<Node> getShortestPath(int from, int to) {
+    public List<Vertex> getShortestPath(int from, int to) {
         if (next[from][to] == null) {
             return null;
         }
-        List<Node> path = new ArrayList<>();
+        List<Vertex> path = new ArrayList<>();
         path.add(graph.getNodeByOrderedId(from));
         while (from != to) {
             from = next[from][to];
@@ -95,15 +95,15 @@ public class FloydWarshall {
         return path;
     }
 
-    public List<Node> getPathToNearestNotVisitedHospital(int fromId) {
+    public List<Vertex> getPathToNearestNotVisitedHospital(int fromId) {
         List<Element> sortedDistFrom = sortedDist.get(fromId);
         int toId = Integer.MAX_VALUE;
         for (int i = 1; i < sortedDistFrom.size(); i++) {
             int nodeId = sortedDistFrom.get(i).index;
-            Node node = graph.getNodeByOrderedId(nodeId);
-            if (!node.isVisited() && node.isHospital()) {
+            Vertex vertex = graph.getNodeByOrderedId(nodeId);
+            if (!vertex.isVisited() && vertex.isHospital()) {
                 toId = nodeId;
-                node.setIsVisited(true);
+                vertex.setIsVisited(true);
                 break;
             }
         }

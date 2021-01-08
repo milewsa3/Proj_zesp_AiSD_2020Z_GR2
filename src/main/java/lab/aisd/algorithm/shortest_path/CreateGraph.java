@@ -8,7 +8,7 @@ import lab.aisd.model.*;
 
 public class CreateGraph {
     public Graph createGraph(InputData inputData){
-        List<Node> nodes = new ArrayList<>();
+        List<Vertex> vertices = new ArrayList<>();
         List<Path> paths = inputData.getPaths();
         List<Hospital> hosps = inputData.getHospitals();
         
@@ -20,7 +20,7 @@ public class CreateGraph {
             if("INTERSECTION".equals(hosp.getName())){
                 isHospital = false;
             }
-            nodes.add(new Node(hosp, isHospital, index));
+            vertices.add(new Vertex(hosp, isHospital, index));
             index++;
         }
         
@@ -33,7 +33,7 @@ public class CreateGraph {
                 //path replaced by intersection
                 continue;
             }
-            graph.addEdge(nodes.get(firstID), nodes.get(secondID), distance);
+            graph.addEdge(vertices.get(firstID), vertices.get(secondID), distance);
         }
         
         return graph;

@@ -18,6 +18,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
+import lab.aisd.algorithm.model.Vertex;
 import lab.aisd.animation.FadeInTransition;
 import lab.aisd.gui.converter.BoarderMarkerImpl;
 import lab.aisd.gui.converter.BorderMarker;
@@ -265,9 +266,7 @@ public class MapController implements Initializable {
             new IntersectionFinder().intersectionFinder(mapData);
 
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
-            //better to add dialog box than print
             ErrorAlerter.showIntersectionsError();
-            //System.out.println("Intersection finder failed!");
         } 
         
         //test to checki if it works 
@@ -282,6 +281,14 @@ public class MapController implements Initializable {
         });
         */
         Graph graph = new CreateGraph().createGraph(mapData);
+//        NearestHospitalFinder finder = new NearestHospitalFinder(graph);
+//        Vertex vertex = finder.findNearestHospitalByCoordinate(patientsData.get(0).getPosition());
+//
+//        FloydWarshall fw = new FloydWarshall(graph);
+//
+//        fw.computeShortestPaths();
+
+
         System.out.println("done");
     }
 

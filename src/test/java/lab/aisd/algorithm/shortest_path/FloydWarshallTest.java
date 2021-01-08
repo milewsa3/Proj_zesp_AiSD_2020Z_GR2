@@ -1,7 +1,7 @@
 package lab.aisd.algorithm.shortest_path;
 
 import lab.aisd.algorithm.model.Graph;
-import lab.aisd.algorithm.model.Node;
+import lab.aisd.algorithm.model.Vertex;
 import lab.aisd.model.Coordinate;
 import lab.aisd.model.Hospital;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,20 +19,20 @@ class FloydWarshallTest {
     @BeforeAll
     static void setup() {
         graph = new Graph(6);
-        List<Node> nodes = new ArrayList<>();
+        List<Vertex> vertices = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            nodes.add(new Node(new Hospital(), true, i));
+            vertices.add(new Vertex(new Hospital(), true, i));
         }
-        nodes.add(new Node(new Coordinate(69, 82), false, 5));
-        graph.addEdge(nodes.get(0), nodes.get(3), 550);
-        graph.addEdge(nodes.get(0), nodes.get(5), 455);
-        graph.addEdge(nodes.get(0), nodes.get(4), 800);
-        graph.addEdge(nodes.get(3), nodes.get(5), 338);
-        graph.addEdge(nodes.get(3), nodes.get(1), 550);
-        graph.addEdge(nodes.get(1), nodes.get(5), 245);
-        graph.addEdge(nodes.get(1), nodes.get(2), 300);
-        graph.addEdge(nodes.get(2), nodes.get(4), 600);
-        graph.addEdge(nodes.get(4), nodes.get(5), 412);
+        vertices.add(new Vertex(new Coordinate(69, 82), false, 5));
+        graph.addEdge(vertices.get(0), vertices.get(3), 550);
+        graph.addEdge(vertices.get(0), vertices.get(5), 455);
+        graph.addEdge(vertices.get(0), vertices.get(4), 800);
+        graph.addEdge(vertices.get(3), vertices.get(5), 338);
+        graph.addEdge(vertices.get(3), vertices.get(1), 550);
+        graph.addEdge(vertices.get(1), vertices.get(5), 245);
+        graph.addEdge(vertices.get(1), vertices.get(2), 300);
+        graph.addEdge(vertices.get(2), vertices.get(4), 600);
+        graph.addEdge(vertices.get(4), vertices.get(5), 412);
     }
 
     @Test
@@ -57,21 +57,21 @@ class FloydWarshallTest {
     void getShortestPath() {
         FloydWarshall floydWarshall = new FloydWarshall(graph);
         floydWarshall.computeShortestPaths();
-        List<Node> expectedPath = new ArrayList<>(
+        List<Vertex> expectedPath = new ArrayList<>(
                 Arrays.asList(
-                        new Node(new Hospital(), true, 1),
-                        new Node(new Coordinate(69, 82), false, 5),
-                        new Node(new Hospital(), true, 4)
+                        new Vertex(new Hospital(), true, 1),
+                        new Vertex(new Coordinate(69, 82), false, 5),
+                        new Vertex(new Hospital(), true, 4)
                 )
         );
         assertEquals(expectedPath, floydWarshall.getShortestPath(1, 4));
 
         expectedPath = new ArrayList<>(
                 Arrays.asList(
-                        new Node(new Hospital(), true, 0),
-                        new Node(new Coordinate(69, 82), false, 5),
-                        new Node(new Hospital(), true, 1),
-                        new Node(new Hospital(), true, 2)
+                        new Vertex(new Hospital(), true, 0),
+                        new Vertex(new Coordinate(69, 82), false, 5),
+                        new Vertex(new Hospital(), true, 1),
+                        new Vertex(new Hospital(), true, 2)
                 )
         );
         assertEquals(expectedPath, floydWarshall.getShortestPath(0, 2));
@@ -83,11 +83,11 @@ class FloydWarshallTest {
         floydWarshall.computeShortestPaths();
         Integer[] destinations = {3, 1, 4, 2, null};
         for (int i = 0; i < 4; i++) {
-            List<Node> path = floydWarshall.getPathToNearestNotVisitedHospital(0);
+            List<Vertex> path = floydWarshall.getPathToNearestNotVisitedHospital(0);
             int destinationId = path.get(path.size() - 1).getOrderedId();
             assertEquals(destinations[i], destinationId);
         }
-        List<Node> path = floydWarshall.getPathToNearestNotVisitedHospital(0);
+        List<Vertex> path = floydWarshall.getPathToNearestNotVisitedHospital(0);
         assertNull(path);
     }
 
