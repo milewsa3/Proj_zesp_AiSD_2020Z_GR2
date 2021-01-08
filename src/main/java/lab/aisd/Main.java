@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         StageManager.initInstance(primaryStage);
         displayInitialScene();
-        playBackgroundMusic();
+        //playBackgroundMusic();
     }
 
     protected void displayInitialScene() {

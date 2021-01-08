@@ -49,7 +49,7 @@ public class Vertex extends Hospital {
     }
 
     public String toString() {
-        return "" + orderedId;
+        return "" + (orderedId + 1) ;
     }
 
     @Override

@@ -281,13 +281,45 @@ public class MapController implements Initializable {
         });
         */
         Graph graph = new CreateGraph().createGraph(mapData);
-//        NearestHospitalFinder finder = new NearestHospitalFinder(graph);
-//        Vertex vertex = finder.findNearestHospitalByCoordinate(patientsData.get(0).getPosition());
-//
-//        FloydWarshall fw = new FloydWarshall(graph);
-//
-//        fw.computeShortestPaths();
+        NearestHospitalFinder finder = new NearestHospitalFinder(graph);
+        FloydWarshall fw = new FloydWarshall(graph);
+        fw.computeShortestPaths();
 
+        for (Patient patient : patientsData) {
+            fw.resetVisitedNodes();
+
+            Vertex vertex = finder.findNearestHospitalByCoordinate(patient.getPosition());
+            Hospital firstHospital = (Hospital) vertex;
+            System.out.println("First hospital: " + firstHospital.getPosition());
+
+            if (firstHospital.areThereFreeBeds()) {
+                System.out.println("Kozak, jest miejsce");
+                firstHospital.setFreeBedsCount(firstHospital.getFreeBedsCount()-1);
+                continue;
+            }
+
+            List<Vertex> path;
+            boolean hospitalFound = false;
+
+            Vertex lastHospital = vertex;
+
+            while ((path = fw.getPathToNearestNotVisitedHospital(lastHospital.getOrderedId())) != null) {
+                System.out.println("Animacja");
+                System.out.println(path);
+                lastHospital = path.get(path.size() - 1);
+
+                if (lastHospital.areThereFreeBeds()) {
+                    System.out.println("Zostawiam tu pacjenta "  + lastHospital);
+                    ((Hospital)lastHospital).setFreeBedsCount(lastHospital.getFreeBedsCount() - 1);
+                    hospitalFound = true;
+                    break;
+                }
+            }
+
+            if (!hospitalFound) {
+                System.out.println("Nie ma wolnych szpitali sadge");
+            }
+        }
 
         System.out.println("done");
     }
@@ -358,7 +390,18 @@ public class MapController implements Initializable {
         mainArea.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                mousePosLb.setText("x: " + event.getX() + ", y: " + event.getY());
+                if (mapGenerator == null ||
+                        mapGenerator.getScaler() == null ||
+                        !mapGenerator.getScaler().areRatiosCalculated())
+                    return;
+
+                double x = event.getX();
+                double y = event.getY();
+                Coordinate coords = new Coordinate((int)x,(int)y);
+
+                mapGenerator.getScaler().unscale(coords);
+
+                mousePosLb.setText("x: " + coords.getX() + ", y: " + coords.getY());
             }
         });
 

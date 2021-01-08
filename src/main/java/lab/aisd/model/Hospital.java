@@ -41,6 +41,10 @@ public class Hospital extends MapObject {
         this.freeBedsCount = freeBedsCount;
     }
 
+    public boolean areThereFreeBeds() {
+        return  freeBedsCount > 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
