@@ -24,6 +24,9 @@ public class NearestHospitalFinder {
                 nearestHospital = node;
             }
         }
+        if(nearestHospital != null){
+            nearestHospital.setIsVisited(true);
+        }
         return nearestHospital;
     }
 

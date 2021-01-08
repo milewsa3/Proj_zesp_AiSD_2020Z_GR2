@@ -23,6 +23,10 @@ public class FloydWarshall {
         return graph;
     }
 
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
     public FloydWarshall(Graph graph) {
         this.graph = graph;
         int nodesNumber = graph.getNodesNumber();
