@@ -27,6 +27,9 @@ import lab.aisd.gui.generator.MapGenerator;
 import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
 import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.util.ConfirmationAlerter;
+import lab.aisd.gui.util.ErrorAlerter;
+import lab.aisd.gui.util.InfoAlerter;
 import lab.aisd.gui.util.OffsetManager;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
@@ -117,14 +120,10 @@ public class MapController implements Initializable {
 
             draw_border();
 
-            showDataLoadedSuccessfullyAlert();
+            InfoAlerter.showDataLoadedSuccessfullyInfo();
 
         } catch (Exception e) {
-            StageManager.getInstance().showAlertScene(
-                    Alert.AlertType.ERROR,
-                    "Error",
-                    "Reading map file error",
-                    e.getMessage());
+            ErrorAlerter.showReadingMapFileError(e.getMessage());
         }
     }
 
@@ -209,24 +208,11 @@ public class MapController implements Initializable {
             for (MapObjectIcon icon : patientIconsData)
                 addObjectToTheMap(icon);
 
-            showDataLoadedSuccessfullyAlert();
+            InfoAlerter.showDataLoadedSuccessfullyInfo();
 
         } catch (Exception e) {
-            StageManager.getInstance().showAlertScene(
-                    Alert.AlertType.ERROR,
-                    "Error",
-                    "Reading patients file error",
-                    e.getMessage());
+            ErrorAlerter.showReadingPatientFileError(e.getMessage());
         }
-    }
-
-    private void showDataLoadedSuccessfullyAlert() {
-        StageManager.getInstance().showAlertScene(
-                Alert.AlertType.INFORMATION,
-                "Information",
-                "Data loaded successfully",
-                "Great. Your data is valid and it was loaded properly."
-        );
     }
 
     private void addObjectToTheMap(Node node) {
@@ -264,11 +250,11 @@ public class MapController implements Initializable {
     @FXML
     void startCalc(ActionEvent event) {
         // Main calculations of the program (Business logic)
-        if (!userWantsToStartCalc())
+        if (!ConfirmationAlerter.showUserWantsToStartCalcConfirmation())
             return;
 
         if (!isDataValid()) {
-            showDataNotValidError();
+            ErrorAlerter.showDataNotValidError();
             return;
         }
 
@@ -280,7 +266,7 @@ public class MapController implements Initializable {
 
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
             //better to add dialog box than print
-            showIntersectionsFailed();
+            ErrorAlerter.showIntersectionsError();
             //System.out.println("Intersection finder failed!");
         } 
         
@@ -297,34 +283,6 @@ public class MapController implements Initializable {
         */
         Graph graph = new CreateGraph().createGraph(mapData);
         System.out.println("done");
-    }
-
-    private void showIntersectionsFailed(){
-        StageManager.getInstance().showAlertScene(
-                Alert.AlertType.ERROR,
-                "Error",
-                "Intersection Finder Issue",
-                "Intersection finder failed. Coudn't calculate intersection points!"
-        );
-    }
-    
-    private void showDataNotValidError() {
-        StageManager.getInstance().showAlertScene(
-                Alert.AlertType.ERROR,
-                "Error",
-                "Data issue",
-                "Data is not loaded"
-        );
-    }
-
-    private boolean userWantsToStartCalc() {
-        Optional<ButtonType> result = StageManager.getInstance().showAlertScene(
-                Alert.AlertType.CONFIRMATION,
-                "Confirmation Dialog",
-                "Confirmation",
-                "Are you sure you want to start calculations?");
-
-        return result.get() == ButtonType.OK;
     }
 
     private boolean isDataValid() {
@@ -358,12 +316,7 @@ public class MapController implements Initializable {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                     if(mouseEvent.getClickCount() == 2) {
                         if (!isMapLoaded()) {
-                            StageManager.getInstance().showAlertScene(
-                                    Alert.AlertType.ERROR,
-                                    "Error",
-                                    "Map not loaded",
-                                    "To load patient, you have to load map first"
-                            );
+                            ErrorAlerter.showMapNotLoadedError();
                         } else {
                             if (patientIconsData == null)
                                 return;
@@ -379,12 +332,7 @@ public class MapController implements Initializable {
                             pg.generate();
 
                             if (!borderMarker.isWithinBorder(pg.getPatient())) {
-                                StageManager.getInstance().showAlertScene(
-                                        Alert.AlertType.ERROR,
-                                        "Error",
-                                        "Patient is not within the border",
-                                        "You must locate patient within the border!"
-                                );
+                                ErrorAlerter.showPatientNotWithinBorderError();
 
                                 return;
                             }

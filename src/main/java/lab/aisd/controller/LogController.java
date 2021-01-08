@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
+import lab.aisd.gui.util.ErrorAlerter;
 import lab.aisd.log.Log;
 import lab.aisd.log.Logger;
 import lab.aisd.util.StageManager;
@@ -45,8 +46,7 @@ public class LogController implements Initializable {
                 bw.close();
             }
         } catch (IOException e) {
-            StageManager.getInstance().showAlertScene(Alert.AlertType.ERROR, "Error", "Problem with saving",
-                    e.getMessage());
+            ErrorAlerter.showFileHandlingError(e.getMessage());
         }
     }
 
