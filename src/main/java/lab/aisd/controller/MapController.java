@@ -32,6 +32,7 @@ import lab.aisd.gui.util.ConfirmationAlerter;
 import lab.aisd.gui.util.ErrorAlerter;
 import lab.aisd.gui.util.InfoAlerter;
 import lab.aisd.gui.util.OffsetManager;
+import lab.aisd.log.*;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;
@@ -41,6 +42,7 @@ import lab.aisd.util.input.InputFileReader;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Consumer;
 
 import lab.aisd.algorithm.intersections.IntersectionFinder;
 import lab.aisd.algorithm.model.Graph;
@@ -250,7 +252,6 @@ public class MapController implements Initializable {
 
     @FXML
     void startCalc(ActionEvent event) {
-        // Main calculations of the program (Business logic)
         if (!ConfirmationAlerter.showUserWantsToStartCalcConfirmation())
             return;
 
@@ -258,70 +259,127 @@ public class MapController implements Initializable {
             ErrorAlerter.showDataNotValidError();
             return;
         }
-
-        //Start calculations
         
         try {
-            //OFFSET!!!!
             new IntersectionFinder().intersectionFinder(mapData);
 
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
             ErrorAlerter.showIntersectionsError();
-        } 
-        
-        //test to checki if it works 
-        /*
-        mapData.getPaths().forEach((x) -> {
-            System.out.println(x.getId() + " | " + x.getFirstHospitalID() + " -> " + x.getSecondHospitalID() + " | " + x.getDistance());
-        });
-        System.out.println("\n");
-        mapData.getHospitals().forEach((x) -> {
-            Coordinate n = x.getPosition();
-            System.out.println(x.getId() + " | " + x.getName() + " | " + n.getX() + " x " + n.getY());
-        });
-        */
-        Graph graph = new CreateGraph().createGraph(mapData);
+        }
+
+        Graph graph = new GraphCreator().createGraph(mapData);
         NearestHospitalFinder finder = new NearestHospitalFinder(graph);
         FloydWarshall fw = new FloydWarshall(graph);
         fw.computeShortestPaths();
 
+        Employer employer = new Employer();
+        AmbulanceFactory ambulanceFactory = new AmbulanceFactory(mainArea, mainAreaBox, patientIconsData);
+        JobFactory jobFactory = new JobFactory(visualData, patientIconsData);
+
+        Map<Vertex, Hospital> vertexToHospitalMap = new HashMap<>();
+        for (int i = 0; i<graph.getNodesNumber(); i++) {
+            vertexToHospitalMap.put(graph.getAllNodes().get(i), mapData.getHospitals().get(i));
+        }
+
         for (Patient patient : patientsData) {
             fw.resetVisitedNodes();
 
-            Vertex vertex = finder.findNearestHospitalByCoordinate(patient.getPosition());
-            Hospital firstHospital = (Hospital) vertex;
-            System.out.println("First hospital: " + firstHospital.getPosition());
+            MapObjectIcon ambulance = ambulanceFactory.createAmbulanceForPatient(patient);
+            Job createAmbulance = new Job();
+            createAmbulance.setAction(() -> {
+                addObjectToTheMap(ambulance);
+                createAmbulance.setFinished(true);
+            });
+            createAmbulance.setDescription("Creating ambulance for patient id: " + patient.getId());
 
-            if (firstHospital.areThereFreeBeds()) {
-                System.out.println("Kozak, jest miejsce");
-                firstHospital.setFreeBedsCount(firstHospital.getFreeBedsCount()-1);
+            Job pickUpPatient = jobFactory.createPickUpJob(ambulance, patient);
+            employer.add(createAmbulance,pickUpPatient);
+
+            Vertex nearestHospitalVertex = finder.findNearestHospitalByCoordinate(patient.getPosition());
+            Hospital nearestHospital = vertexToHospitalMap.get(nearestHospitalVertex);
+
+            Job driveToFirstHospital = jobFactory.createPatientTransportJob(ambulance, patient, nearestHospital);
+            employer.add(driveToFirstHospital);
+
+            if (nearestHospital.areThereFreeBeds()) {
+                Job leavePatient = jobFactory.createLeavePatientJob(ambulance, patient);
+                employer.add(leavePatient);
+                nearestHospital.setFreeBedsCount(nearestHospital.getFreeBedsCount()-1);
+
                 continue;
             }
 
-            List<Vertex> path;
-            boolean hospitalFound = false;
+            Vertex lastVisitedHospital = nearestHospitalVertex;
+            List<Vertex> pathOfVertices;
+            List<Hospital> path;
+            boolean patientFoundHospital = false;
 
-            Vertex lastHospital = vertex;
+            while ((pathOfVertices = fw.getPathToNearestNotVisitedHospital(lastVisitedHospital.getOrderedId())) != null) {
+                path = new ArrayList<>();
+                for (Vertex v : pathOfVertices) {
+                    path.add(vertexToHospitalMap.get(v));
+                }
 
-            while ((path = fw.getPathToNearestNotVisitedHospital(lastHospital.getOrderedId())) != null) {
-                System.out.println("Animacja");
-                System.out.println(path);
-                lastHospital = path.get(path.size() - 1);
+                if (path.size() == 2) {
+                    Job drivingFromHospitalToHospital = jobFactory
+                            .createPatientTransportJob(ambulance, patient ,path.get(0), path.get(1));
+                    employer.add(drivingFromHospitalToHospital);
 
-                if (lastHospital.areThereFreeBeds()) {
-                    System.out.println("Zostawiam tu pacjenta "  + lastHospital);
-                    ((Hospital)lastHospital).setFreeBedsCount(lastHospital.getFreeBedsCount() - 1);
-                    hospitalFound = true;
+                } else if (path.size() > 2) {
+                    Job driveToCrossing = jobFactory
+                            .createPatientTransportJob(
+                                    ambulance,
+                                    patient,
+                                    path.get(0),
+                                    path.get(1),
+                                    mapGenerator.createScaledCrossingIcon(path.get(1))
+                            );
+                    employer.add(driveToCrossing);
+
+                    for (int i = 2; i < path.size() - 1; i++) {
+                        Job driving = jobFactory.createPatientTransportJob(
+                                ambulance,
+                                patient,
+                                path.get(i-1), mapGenerator.createScaledCrossingIcon(path.get(i-1)),
+                                path.get(i), mapGenerator.createScaledCrossingIcon(path.get(i))
+                        );
+                        employer.add(driving);
+                    }
+
+
+                    Job driveToHospital = jobFactory
+                            .createPatientTransportJob(
+                                    ambulance,
+                                    patient,
+                                    path.get(path.size() - 2),
+                                    mapGenerator.createScaledCrossingIcon(path.get(path.size() - 2)),
+                                    path.get(path.size() - 1)
+                                    );
+                    employer.add(driveToHospital);
+                }
+
+                lastVisitedHospital = pathOfVertices.get(pathOfVertices.size() - 1);
+
+                if (lastVisitedHospital.areThereFreeBeds()) {
+                    Job leavePatient = jobFactory.createLeavePatientJob(ambulance, patient);
+                    employer.add(leavePatient);
+                    lastVisitedHospital.setFreeBedsCount(lastVisitedHospital.getFreeBedsCount() - 1);
+                    patientFoundHospital = true;
                     break;
                 }
             }
 
-            if (!hospitalFound) {
+            if (!patientFoundHospital) {
+                Job leavePatient = jobFactory.createLeavePatientJob(ambulance, patient);
+                employer.add(leavePatient);
+                //dodać coś żeby pokazać że zostawiam bo nie ma żadnych wolnych łóżek
                 System.out.println("Nie ma wolnych szpitali sadge");
             }
+
         }
 
-        System.out.println("done");
+        employer.startJobs();
+        System.out.println(employer.getAllLogs());
     }
 
     private boolean isDataValid() {

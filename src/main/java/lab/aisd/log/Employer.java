@@ -23,6 +23,10 @@ public class Employer {
         }
     }
 
+    public void clear() {
+        jobs.clear();
+    }
+
     public void startJobs() {
         Job firstJob = jobs.getFirst();
         firstJob.commit();

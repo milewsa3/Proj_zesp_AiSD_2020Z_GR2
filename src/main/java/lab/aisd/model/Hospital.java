@@ -51,11 +51,22 @@ public class Hospital extends MapObject {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Hospital hospital = (Hospital) o;
-        return bedsCount == hospital.bedsCount && freeBedsCount == hospital.freeBedsCount && name.equals(hospital.name);
+        return bedsCount == hospital.bedsCount && name.equals(hospital.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, bedsCount, freeBedsCount);
+        return Objects.hash(super.hashCode(), name, bedsCount);
+    }
+
+    @Override
+    public String toString() {
+        return "Hospital{" +
+                "name='" + name + '\'' +
+                ", bedsCount=" + bedsCount +
+                ", freeBedsCount=" + freeBedsCount +
+                ", id=" + id +
+                ", position=" + position +
+                '}';
     }
 }

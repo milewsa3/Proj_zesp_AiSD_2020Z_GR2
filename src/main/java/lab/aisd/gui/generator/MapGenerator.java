@@ -7,10 +7,7 @@ import lab.aisd.gui.model.BuildingIcon;
 import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.model.PatientIcon;
-import lab.aisd.model.Building;
-import lab.aisd.model.Coordinate;
-import lab.aisd.model.Hospital;
-import lab.aisd.model.Patient;
+import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
 
 import java.util.HashMap;
@@ -78,6 +75,15 @@ public class MapGenerator {
         HospitalIcon icon = new HospitalIcon(position.getX(), position.getY());
         icon.setPrefHeight(iconHeight);
         positionIconToBeInTheCenterOfPoint(icon);
+
+        return icon;
+    }
+
+    public MapObjectIcon createScaledCrossingIcon(MapObject crossing) {
+        Coordinate position = crossing.getPosition();
+        MapObjectIcon icon = new MapObjectIcon(position.getX(), position.getY());
+        positionIconToBeInTheCenterOfPoint(icon);
+        scaler.scale(icon);
 
         return icon;
     }

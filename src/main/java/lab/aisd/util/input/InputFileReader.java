@@ -67,7 +67,7 @@ public class InputFileReader {
         try {
             id = Integer.parseInt(scanner.next().trim());
             ensureIdUniqueness(id, hospitalIds);
-            name = scanner.next();
+            name = scanner.next().trim();
             x = Integer.parseInt(scanner.next().trim());
             y = Integer.parseInt(scanner.next().trim());
             bedsCount = Integer.parseInt(scanner.next().trim());

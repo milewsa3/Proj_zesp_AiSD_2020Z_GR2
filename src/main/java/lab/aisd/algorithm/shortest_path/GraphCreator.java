@@ -6,7 +6,7 @@ import lab.aisd.algorithm.model.*;
 import lab.aisd.util.input.InputData;
 import lab.aisd.model.*;
 
-public class CreateGraph {
+public class GraphCreator {
     public Graph createGraph(InputData inputData){
         List<Vertex> vertices = new ArrayList<>();
         List<Path> paths = inputData.getPaths();

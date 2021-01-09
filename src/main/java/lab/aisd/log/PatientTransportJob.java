@@ -12,6 +12,7 @@ import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
 import lab.aisd.model.Hospital;
+import lab.aisd.model.MapObject;
 import lab.aisd.model.Patient;
 
 public class PatientTransportJob extends Job {
@@ -44,6 +45,30 @@ public class PatientTransportJob extends Job {
         };
 
         setAction(action);
+    }
+
+    public void setDescription(Patient patient, Hospital from, MapObject toCrossing) {
+        String desc = "Transporting patient id: " + patient.getId() +
+                " from hospital id: " + from.getId() +
+                " to crossing of position: " + toCrossing.getPosition();
+
+        setDescription(desc);
+    }
+
+    public void setDescription(Patient patient, MapObject fromCrossing, MapObject toCrossing) {
+        String desc = "Transporting patient id: " + patient.getId() +
+                " from crossing of position: " + fromCrossing.getId() +
+                " to crossing of position: " + toCrossing.getPosition();
+
+        setDescription(desc);
+    }
+
+    public void setDescription(Patient patient, MapObject fromCrossing, Hospital to) {
+        String desc = "Transporting patient id: " + patient.getId() +
+                " from crossing of position: " + fromCrossing.getId() +
+                " to hospital id: " + to.getPosition();
+
+        setDescription(desc);
     }
 
     public void setDescription(Patient patient, Hospital from , Hospital to) {

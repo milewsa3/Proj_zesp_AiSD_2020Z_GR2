@@ -60,4 +60,8 @@ public class VisualInputData implements Iterable<MapObjectIcon>{
     public void setBuildings(Map<Building, BuildingIcon> buildings) {
         this.buildings = buildings;
     }
+
+    public Map<Hospital, HospitalIcon> getHospitals() {
+        return hospitals;
+    }
 }
