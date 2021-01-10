@@ -39,6 +39,7 @@ public class Logger {
     }
 
     public ObservableList<Log> getListOfLogs() {
+        Log.setNumOfLogs(0);
         return logs;
     }
 

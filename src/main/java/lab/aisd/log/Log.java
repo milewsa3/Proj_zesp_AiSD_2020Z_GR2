@@ -14,4 +14,8 @@ public class Log {
     public String toString() {
         return id + ". " + message;
     }
+
+    public static void setNumOfLogs(int numOfLogs) {
+        Log.numOfLogs = numOfLogs;
+    }
 }

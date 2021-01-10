@@ -6,9 +6,6 @@ import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.model.Hospital;
 import lab.aisd.model.MapObject;
 import lab.aisd.model.Patient;
-import lab.aisd.util.input.InputData;
-
-import java.util.List;
 
 public class JobFactory {
     private VisualInputData visualData;
@@ -93,8 +90,15 @@ public class JobFactory {
         return result;
     }
 
-    public Job createLeavePatientJob(MapObjectIcon ambulance, Patient patient) {
-        LeavePatientJob result = new LeavePatientJob(ambulance);
+    public Job createLeavePatientInHospitalJob(MapObjectIcon ambulance, Patient patient) {
+        LeavePatientInHospitalJob result = new LeavePatientInHospitalJob(ambulance);
+        result.setDescription(patient);
+
+        return result;
+    }
+
+    public Job createLeavePatientOutsideJob(MapObjectIcon ambulance, Patient patient) {
+        LeavePatientOutsideJob result = new LeavePatientOutsideJob(ambulance);
         result.setDescription(patient);
 
         return result;

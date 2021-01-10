@@ -17,7 +17,7 @@ public class Employer {
         jobs.addLast(job);
     }
 
-    public void add(Job ... jobs) {
+    public void addAll(Job ... jobs) {
         for (Job j : jobs) {
             add(j);
         }
@@ -36,7 +36,11 @@ public class Employer {
         List<String> logs = new ArrayList<>();
 
         for (Job job : jobs) {
-            logs.add(job.getDescription());
+            String description = job.getDescription();
+
+            if (description.compareTo("Not described") != 0) {
+                logs.add(description);
+            }
         }
 
         return logs;

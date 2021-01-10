@@ -12,8 +12,6 @@ public class Job {
     private String description;
 
     private final BooleanProperty finished = new SimpleBooleanProperty(false);
-    protected static final double DEFAULT_SPEED = 500;
-    private static double speedScale = 1.0;
 
     public Job() {
         action = () -> System.out.println("Not implemented");
@@ -22,6 +20,7 @@ public class Job {
 
     public Job(Action action) {
         this.action = action;
+        description = "Not described";
     }
 
     public Job(Action action, String description) {
@@ -72,19 +71,6 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public static void setSpeedScale(double speedScale) {
-        if (speedScale > 0 && speedScale < 2)
-            Job.speedScale = speedScale;
-    }
-
-    public static double getSpeedScale() {
-        return speedScale;
-    }
-
-    public static double getSpeed() {
-        return DEFAULT_SPEED / speedScale;
     }
 }
 

@@ -45,6 +45,10 @@ public class Hospital extends MapObject {
         return  freeBedsCount > 0;
     }
 
+    public void decrementFreeBedsBy(int value) {
+        freeBedsCount -= value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

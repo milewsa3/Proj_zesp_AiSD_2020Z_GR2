@@ -6,13 +6,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import lab.aisd.gui.collection.Config;
 import lab.aisd.log.Job;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ConfigurationController implements Initializable {
+    private Config config = Config.getInstance();
 
     @FXML
     private RadioButton animationRb;
@@ -29,17 +32,21 @@ public class ConfigurationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initSpeedSlider();
+        initConfig();
+    }
 
-
+    private void initConfig() {
+        displayOpt.selectedToggleProperty().addListener((observable, oldValue, newValue) ->
+                Config.getInstance().setDisplayOption(((RadioButton) newValue).getText()));
     }
 
     private void initSpeedSlider() {
-        speedSlider.setValue(Job.getSpeedScale());
+        speedSlider.setValue(Config.getInstance().getSpeedScale());
 
         speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Job.setSpeedScale(newValue.doubleValue());
+                Config.getInstance().setSpeedScale(newValue.doubleValue());
             }
         });
     }

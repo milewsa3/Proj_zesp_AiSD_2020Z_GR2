@@ -20,6 +20,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import lab.aisd.algorithm.model.Vertex;
 import lab.aisd.animation.FadeInTransition;
+import lab.aisd.gui.collection.Config;
 import lab.aisd.gui.converter.BoarderMarkerImpl;
 import lab.aisd.gui.converter.BorderMarker;
 import lab.aisd.gui.collection.PatientIconsCollection;
@@ -42,7 +43,6 @@ import lab.aisd.util.input.InputFileReader;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Consumer;
 
 import lab.aisd.algorithm.intersections.IntersectionFinder;
 import lab.aisd.algorithm.model.Graph;
@@ -259,7 +259,17 @@ public class MapController implements Initializable {
             ErrorAlerter.showDataNotValidError();
             return;
         }
+
+        disableStartButton();
         
+        startCalculations();
+    }
+
+    private void disableStartButton() {
+        startBt.setDisable(true);
+    }
+
+    private void startCalculations() {
         try {
             new IntersectionFinder().intersectionFinder(mapData);
 
@@ -291,9 +301,10 @@ public class MapController implements Initializable {
                 createAmbulance.setFinished(true);
             });
             createAmbulance.setDescription("Creating ambulance for patient id: " + patient.getId());
+            employer.add(createAmbulance);
 
             Job pickUpPatient = jobFactory.createPickUpJob(ambulance, patient);
-            employer.add(createAmbulance,pickUpPatient);
+            employer.add(pickUpPatient);
 
             Vertex nearestHospitalVertex = finder.findNearestHospitalByCoordinate(patient.getPosition());
             Hospital nearestHospital = vertexToHospitalMap.get(nearestHospitalVertex);
@@ -302,9 +313,9 @@ public class MapController implements Initializable {
             employer.add(driveToFirstHospital);
 
             if (nearestHospital.areThereFreeBeds()) {
-                Job leavePatient = jobFactory.createLeavePatientJob(ambulance, patient);
+                Job leavePatient = jobFactory.createLeavePatientInHospitalJob(ambulance, patient);
                 employer.add(leavePatient);
-                nearestHospital.setFreeBedsCount(nearestHospital.getFreeBedsCount()-1);
+                nearestHospital.decrementFreeBedsBy(1);
 
                 continue;
             }
@@ -354,32 +365,41 @@ public class MapController implements Initializable {
                                     path.get(path.size() - 2),
                                     mapGenerator.createScaledCrossingIcon(path.get(path.size() - 2)),
                                     path.get(path.size() - 1)
-                                    );
+                            );
                     employer.add(driveToHospital);
                 }
 
                 lastVisitedHospital = pathOfVertices.get(pathOfVertices.size() - 1);
 
                 if (lastVisitedHospital.areThereFreeBeds()) {
-                    Job leavePatient = jobFactory.createLeavePatientJob(ambulance, patient);
+                    Job leavePatient = jobFactory.createLeavePatientInHospitalJob(ambulance, patient);
                     employer.add(leavePatient);
-                    lastVisitedHospital.setFreeBedsCount(lastVisitedHospital.getFreeBedsCount() - 1);
+                    lastVisitedHospital.decrementFreeBedsBy(1);
                     patientFoundHospital = true;
+
                     break;
                 }
             }
 
             if (!patientFoundHospital) {
-                Job leavePatient = jobFactory.createLeavePatientJob(ambulance, patient);
+                Job leavePatient = jobFactory.createLeavePatientOutsideJob(ambulance, patient);
                 employer.add(leavePatient);
-                //dodać coś żeby pokazać że zostawiam bo nie ma żadnych wolnych łóżek
-                System.out.println("Nie ma wolnych szpitali sadge");
             }
 
         }
 
-        employer.startJobs();
-        System.out.println(employer.getAllLogs());
+        Job showLogs = new Job(() -> {
+            StageManager.getInstance().openNewNotFocusedWindow(FxmlView.LOG);
+            Logger.getInstance().add(employer.getAllLogs());
+        });
+
+        switch (Config.getInstance().getDisplayOption()) {
+            case ANIMATION -> {
+                employer.add(showLogs);
+                employer.startJobs();
+            }
+            case LOGS -> showLogs.commit();
+        }
     }
 
     private boolean isDataValid() {

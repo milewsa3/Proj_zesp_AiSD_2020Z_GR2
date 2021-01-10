@@ -8,6 +8,7 @@ import javafx.util.Duration;
 import lab.aisd.animation.DrivingTransition;
 import lab.aisd.animation.FadeInTransition;
 import lab.aisd.animation.FadeOutTransition;
+import lab.aisd.gui.collection.Config;
 import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.util.OffsetManager;
@@ -28,7 +29,7 @@ public class PatientTransportJob extends Job {
 
     public void setAction(MapObjectIcon ambulance, MapObjectIcon from, MapObjectIcon to) {
         Action action = () -> {
-            double speed = Job.getSpeed();
+            double speed = Config.getInstance().getSpeed();
 
             FadeInTransition fadeIn = new FadeInTransition(Duration.millis(speed), ambulance);
             DrivingTransition drive = new DrivingTransition(Duration.millis(speed * 2), ambulance, from, to);
@@ -50,23 +51,23 @@ public class PatientTransportJob extends Job {
     public void setDescription(Patient patient, Hospital from, MapObject toCrossing) {
         String desc = "Transporting patient id: " + patient.getId() +
                 " from hospital id: " + from.getId() +
-                " to crossing of position: " + toCrossing.getPosition();
+                " to crossing";
 
         setDescription(desc);
     }
 
     public void setDescription(Patient patient, MapObject fromCrossing, MapObject toCrossing) {
         String desc = "Transporting patient id: " + patient.getId() +
-                " from crossing of position: " + fromCrossing.getId() +
-                " to crossing of position: " + toCrossing.getPosition();
+                " from crossing" +
+                " to crossing";
 
         setDescription(desc);
     }
 
     public void setDescription(Patient patient, MapObject fromCrossing, Hospital to) {
         String desc = "Transporting patient id: " + patient.getId() +
-                " from crossing of position: " + fromCrossing.getId() +
-                " to hospital id: " + to.getPosition();
+                " from crossing" +
+                " to hospital id: " + to.getId();
 
         setDescription(desc);
     }
