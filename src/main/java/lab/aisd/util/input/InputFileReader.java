@@ -63,7 +63,10 @@ public class InputFileReader {
 
         reader.close();
         isCorrectHeaderCount(3, header);
-
+        if(inputData.getPaths().size() < 0 || inputData.getHospitals().size() < 2){
+            throw new InvalidFileFormatException("");
+        }
+        
         return inputData;
     }
 
@@ -79,6 +82,10 @@ public class InputFileReader {
             y = Integer.parseInt(scanner.next().trim());
             bedsCount = Integer.parseInt(scanner.next().trim());
             freeBedsCount = Integer.parseInt(scanner.next().trim());
+            if(bedsCount < 0 || freeBedsCount < 0 || bedsCount < freeBedsCount || name.isEmpty()){
+                throw new InvalidFileFormatException("");
+            }
+            
             return new Hospital(id, name, new Coordinate(x, y), bedsCount, freeBedsCount);
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
             throw new InvalidFileFormatException("Invalid file format in line " + lineNumber);
@@ -109,10 +116,11 @@ public class InputFileReader {
             ensureSortedId(nextPathId, id);
             firstHospitalID = Integer.parseInt(scanner.next().trim());
             secondHospitalID = Integer.parseInt(scanner.next().trim());
-            if (!isNumberInRange(1, hospitalsCount, firstHospitalID) || !isNumberInRange(1, hospitalsCount, secondHospitalID)) {
+            distance = Integer.parseInt(scanner.next().trim());
+            if (!isNumberInRange(1, hospitalsCount, firstHospitalID) || !isNumberInRange(1, hospitalsCount, secondHospitalID) || distance < 0) {
                 throw new InvalidFileFormatException("");
             }
-            distance = Integer.parseInt(scanner.next().trim());
+            
             return new Path(id, firstHospitalID, secondHospitalID, distance);
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
             throw new InvalidFileFormatException("Invalid file format in line " + lineNumber);
