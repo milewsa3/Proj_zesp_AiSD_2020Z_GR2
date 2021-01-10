@@ -1,37 +1,27 @@
 package lab.aisd.algorithm.intersections;
 
-import java.util.ArrayList;
 import java.util.List;
 import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;
 
 public class IntersectionFinder {
 
-    /*
-        TO DO:
-        - unit tests
-        --remove comments
-     */
     public void intersectionFinder(InputData inputData) {
 
-        //get paths and hospitals lists
         List<Path> paths = inputData.getPaths();
         List<Hospital> hosps = inputData.getHospitals();
 
-        if(paths == null || hosps == null){
+        if (paths == null || hosps == null) {
             throw new NullPointerException("Either hospitals or paths are null");
         }
-        
-        if(hosps.size() < 4 || paths.size() < 2){
+
+        if (hosps.size() < 4 || paths.size() < 2) {
             throw new NullPointerException("Too few hospitals or paths");
         }
-        
-        
+
         int index = 0;
         int maximumSizeOfHosps = 0;
 
-        List<Path> pathsCopy = new ArrayList<>(paths);
-        List<Hospital> hospitalCopy = new ArrayList<>(hosps);
         int[][] inLineCheck = null;
 
         try {
@@ -46,15 +36,7 @@ public class IntersectionFinder {
         preperePaths(paths);
 
         while (index < paths.size()) {
-            //if loop is infinity: stop when size is bigger than maximum possible number of hosps + intersections
             if (safetyLoopStop(hosps.size(), maximumSizeOfHosps)) {
-                //System.out.println("XD");
-                paths.clear();
-                paths.addAll(pathsCopy);
-
-                hosps.clear();
-                hosps.addAll(hospitalCopy);
-
                 throw new IndexOutOfBoundsException();
             }
 
@@ -94,14 +76,13 @@ public class IntersectionFinder {
                             continue;
                         }
 
-                        //adding intersection 
                         int intersectionX = (int) Math.round(intersectionCoords[0]);
                         int intersectionY = (int) Math.round(intersectionCoords[1]);
 
                         int intersectionID = hosps.size() + 1;
 
                         hosps.add(new Hospital(intersectionID, "INTERSECTION", new Coordinate(intersectionX, intersectionY), 0, 0));
-                        //test arrays neccessery to work
+
                         intersetionPointCheck[firstID][intersectionID - 1] = 1;
                         intersetionPointCheck[secondID][intersectionID - 1] = 1;
                         intersetionPointCheck[thirdID][intersectionID - 1] = 1;
@@ -110,11 +91,9 @@ public class IntersectionFinder {
                         inLineCheck[firstID][secondID] = 1;
                         inLineCheck[thirdID][fourthID] = 1;
 
-                        //adding new roads with intersection and new distances
                         addNewPaths(paths, hosps, firstID, secondID, intersectionID, index);
                         addNewPaths(paths, hosps, thirdID, fourthID, intersectionID, i);
 
-                        //removing old roads
                         removeOldPaths(paths, index, i);
                     }
                 }
@@ -205,23 +184,22 @@ public class IntersectionFinder {
         return size + size * (size - 1) * (size - 2) * (size - 3) / 24;
     }
 
-/*
+    /*
             ACCESS METHODS FOR TESTS
-*/
-
+     */
     public void testPreperePaths(List<Path> paths) {
         preperePaths(paths);
     }
-    
-    public double testCalculateDistanceBetweenPoints(Coordinate point1, Coordinate point2){
+
+    public double testCalculateDistanceBetweenPoints(Coordinate point1, Coordinate point2) {
         return calculateDistanceBetweenPoints(point1, point2);
     }
 
     public double testDistanceMultipplier(Hospital point1, Hospital point2, Hospital intersection) {
         return distanceMultipplier(point1, point2, intersection);
     }
-    
-    public double[] testIntersectionPoint(Coordinate point1, Coordinate point2, Coordinate point3, Coordinate point4){
+
+    public double[] testIntersectionPoint(Coordinate point1, Coordinate point2, Coordinate point3, Coordinate point4) {
         return intersectionPoint(point1, point2, point3, point4);
     }
 }

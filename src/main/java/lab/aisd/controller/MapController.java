@@ -261,16 +261,26 @@ public class MapController implements Initializable {
 
         //Start calculations
         
+        List<Path> pathsCopy = new ArrayList<>(mapData.getPaths());
+        List<Hospital> hospitalCopy = new ArrayList<>(mapData.getHospitals());
+        
         try {
-            //OFFSET!!!!
             new IntersectionFinder().intersectionFinder(mapData);
 
         } catch (IndexOutOfBoundsException | OutOfMemoryError | NullPointerException e) {
+            mapData.getPaths().clear();
+            mapData.getPaths().addAll(pathsCopy);
+            pathsCopy.clear();
+            
+            mapData.getHospitals().clear();
+            mapData.getHospitals().addAll(hospitalCopy);
+            hospitalCopy.clear();
+            
             ErrorAlerter.showIntersectionsError();
         } 
         
         //test to checki if it works 
-        /*
+        
         mapData.getPaths().forEach((x) -> {
             System.out.println(x.getId() + " | " + x.getFirstHospitalID() + " -> " + x.getSecondHospitalID() + " | " + x.getDistance());
         });
@@ -279,7 +289,7 @@ public class MapController implements Initializable {
             Coordinate n = x.getPosition();
             System.out.println(x.getId() + " | " + x.getName() + " | " + n.getX() + " x " + n.getY());
         });
-        */
+        
         Graph graph = new CreateGraph().createGraph(mapData);
 //        NearestHospitalFinder finder = new NearestHospitalFinder(graph);
 //        Vertex vertex = finder.findNearestHospitalByCoordinate(patientsData.get(0).getPosition());
