@@ -85,7 +85,7 @@ public class InputFileReaderTest {
 
         InputFileReader inputFileReader = new InputFileReader();
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
-        assertEquals("Błędny format pliku w linii 2", exception.getMessage());
+        assertEquals("Invalid file format in line 2", exception.getMessage());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class InputFileReaderTest {
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
-        assertEquals("Niepoprawna liczba nagłówków. Oczekiwana liczba nagłówków to: 3", exception.getMessage());
+        assertEquals("Incorrect number of headers. Expected number of headers: 3", exception.getMessage());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class InputFileReaderTest {
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
-        assertEquals("Błędny format pliku w linii 2", exception.getMessage());
+        assertEquals("Invalid file format in line 2", exception.getMessage());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class InputFileReaderTest {
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
-        assertEquals("Błędny format pliku w linii 3", exception.getMessage());
+        assertEquals("Invalid file format in line 3", exception.getMessage());
     }
 
     @Test
@@ -139,7 +139,7 @@ public class InputFileReaderTest {
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
-        assertEquals("Błędny format pliku w linii 7", exception.getMessage());
+        assertEquals("Invalid file format in line 7", exception.getMessage());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class InputFileReaderTest {
         InputFileReader inputFileReader = new InputFileReader();
 
         Throwable exception = assertThrows(InvalidFileFormatException.class, () -> inputFileReader.saveMainFileData(reader));
-        assertEquals("Błędny format pliku w linii 9", exception.getMessage());
+        assertEquals("Invalid file format in line 9", exception.getMessage());
     }
 
     @Test

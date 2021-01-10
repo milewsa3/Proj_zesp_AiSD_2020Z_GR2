@@ -24,7 +24,7 @@ public class InputFileReader {
         try {
             fileReader = new FileReader(pathToFile);
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("Podany plik nie istnieje.");
+            throw new FileNotFoundException("File does not exist.");
         }
         return fileReader;
     }
@@ -32,9 +32,6 @@ public class InputFileReader {
     public InputData saveMainFileData(Reader fileReader) throws Exception {
         header = 0;
         int lineNumber = 0;
-        Map<Integer, Integer> hospitalIds = new HashMap<>();
-        Map<Integer, Integer> objectIds = new HashMap<>();
-        Map<Integer, Integer> pathIds = new HashMap<>();
         InputData inputData = new InputData();
         BufferedReader reader = new BufferedReader(fileReader);
         line = reader.readLine();
@@ -47,9 +44,19 @@ public class InputFileReader {
             }
 
             switch (header) {
-                case 1 -> inputData.getHospitals().add(readHospital(line, lineNumber, hospitalIds));
-                case 2 -> inputData.getBuildings().add(readObjectOnMap(line, lineNumber, objectIds));
-                case 3 -> inputData.getPaths().add(readPath(line, lineNumber, hospitalIds, pathIds));
+                case 1 -> {
+                    Integer nextHospitalId = inputData.getHospitals().size() + 1;
+                    inputData.getHospitals().add(readHospital(line, lineNumber, nextHospitalId));
+                }
+                case 2 -> {
+                    Integer nextBuildingId = inputData.getBuildings().size() + 1;
+                    inputData.getBuildings().add(readObjectOnMap(line, lineNumber, nextBuildingId));
+                }
+                case 3 -> {
+                    Integer hospitalCount = inputData.getHospitals().size();
+                    Integer nextPathId = inputData.getPaths().size() + 1;
+                    inputData.getPaths().add(readPath(line, lineNumber, hospitalCount, nextPathId));
+                }
             }
             line = reader.readLine();
         }
@@ -60,13 +67,13 @@ public class InputFileReader {
         return inputData;
     }
 
-    private Hospital readHospital(String line, int lineNumber, Map<Integer, Integer> hospitalIds) throws InvalidFileFormatException {
+    private Hospital readHospital(String line, int lineNumber, Integer nextHospitalId) throws InvalidFileFormatException {
         Scanner scanner = new Scanner(line).useDelimiter("\\|");
         int id, x, y, bedsCount, freeBedsCount;
         String name;
         try {
             id = Integer.parseInt(scanner.next().trim());
-            ensureIdUniqueness(id, hospitalIds);
+            ensureSortedId(nextHospitalId, id);
             name = scanner.next();
             x = Integer.parseInt(scanner.next().trim());
             y = Integer.parseInt(scanner.next().trim());
@@ -74,57 +81,58 @@ public class InputFileReader {
             freeBedsCount = Integer.parseInt(scanner.next().trim());
             return new Hospital(id, name, new Coordinate(x, y), bedsCount, freeBedsCount);
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
-            throw new InvalidFileFormatException("Błędny format pliku w linii " + lineNumber);
+            throw new InvalidFileFormatException("Invalid file format in line " + lineNumber);
         }
     }
 
-    private Building readObjectOnMap(String line, int lineNumber, Map<Integer, Integer> objectIds) throws InvalidFileFormatException {
+    private Building readObjectOnMap(String line, int lineNumber, Integer nextBuildingId) throws InvalidFileFormatException {
         Scanner scanner = new Scanner(line).useDelimiter("\\|");
         int id, x, y;
         String name;
         try {
             id = Integer.parseInt(scanner.next().trim());
-            ensureIdUniqueness(id, objectIds);
+            ensureSortedId(nextBuildingId, id);
             name = scanner.next();
             x = Integer.parseInt(scanner.next().trim());
             y = Integer.parseInt(scanner.next().trim());
             return new Building(id, name, new Coordinate(x, y));
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
-            throw new InvalidFileFormatException("Błędny format pliku w linii " + lineNumber);
+            throw new InvalidFileFormatException("Invalid file format in line " + lineNumber);
         }
     }
 
-    private Path readPath(String line, int lineNumber, Map<Integer, Integer> hospitalIds, Map<Integer, Integer> pathIds) throws InvalidFileFormatException {
+    private Path readPath(String line, int lineNumber, Integer hospitalsCount, Integer nextPathId) throws InvalidFileFormatException {
         Scanner scanner = new Scanner(line).useDelimiter("\\|");
         int id, firstHospitalID, secondHospitalID, distance;
         try {
             id = Integer.parseInt(scanner.next().trim());
-            ensureIdUniqueness(id, pathIds);
+            ensureSortedId(nextPathId, id);
             firstHospitalID = Integer.parseInt(scanner.next().trim());
             secondHospitalID = Integer.parseInt(scanner.next().trim());
-            if (!hospitalIds.containsKey(firstHospitalID) || !hospitalIds.containsKey(secondHospitalID)) {
+            if (!isNumberInRange(1, hospitalsCount, firstHospitalID) || !isNumberInRange(1, hospitalsCount, secondHospitalID)) {
                 throw new InvalidFileFormatException("");
             }
             distance = Integer.parseInt(scanner.next().trim());
             return new Path(id, firstHospitalID, secondHospitalID, distance);
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
-            throw new InvalidFileFormatException("Błędny format pliku w linii " + lineNumber);
+            throw new InvalidFileFormatException("Invalid file format in line " + lineNumber);
         }
     }
 
-    private void ensureIdUniqueness(Integer id, Map<Integer, Integer> map) throws InvalidFileFormatException {
-        if (map.containsKey(id)) {
+    private void ensureSortedId(Integer idExpected, Integer idActual) throws InvalidFileFormatException {
+        if (!idExpected.equals(idActual)) {
             throw new InvalidFileFormatException("");
-        } else {
-            map.put(id, id);
         }
+    }
+
+    private boolean isNumberInRange(int start, int end, int number) {
+        return number >= start && number <= end;
     }
 
     public List<Patient> savePatientFileData(Reader fileReader) throws Exception {
         List<Patient> patients = new ArrayList<>();
         int lineNumber = 0;
         header = 0;
-        Map<Integer, Integer> patientIds = new HashMap<>();
         BufferedReader reader = new BufferedReader(fileReader);
         line = reader.readLine();
 
@@ -134,7 +142,8 @@ public class InputFileReader {
                 continue;
             }
             if (header == 1) {
-                patients.add(readPatient(line, lineNumber, patientIds));
+                Integer nextPatientId = patients.size() + 1;
+                patients.add(readPatient(line, lineNumber, nextPatientId));
             }
             line = reader.readLine();
         }
@@ -143,17 +152,17 @@ public class InputFileReader {
         return patients;
     }
 
-    private Patient readPatient(String line, int lineNumber, Map<Integer, Integer> patientIds) throws InvalidFileFormatException {
+    private Patient readPatient(String line, int lineNumber, Integer nextPatientId) throws InvalidFileFormatException {
         Scanner scanner = new Scanner(line).useDelimiter("\\|");
         int id, x, y;
         try {
             id = Integer.parseInt(scanner.next().trim());
-            ensureIdUniqueness(id, patientIds);
+            ensureSortedId(nextPatientId, id);
             x = Integer.parseInt(scanner.next().trim());
             y = Integer.parseInt(scanner.next().trim());
             return new Patient(id, new Coordinate(x, y));
         } catch (NumberFormatException | NoSuchElementException | InvalidFileFormatException e) {
-            throw new InvalidFileFormatException("Błędny format pliku w linii " + lineNumber);
+            throw new InvalidFileFormatException("Invalid file format in line " + lineNumber);
         }
     }
 
@@ -163,7 +172,7 @@ public class InputFileReader {
 
     private void isCorrectHeaderCount(int headerCountExpected, int headerCountActual) throws InvalidFileFormatException {
         if (headerCountExpected != headerCountActual) {
-            throw new InvalidFileFormatException("Niepoprawna liczba nagłówków. Oczekiwana liczba nagłówków to: "
+            throw new InvalidFileFormatException("Incorrect number of headers. Expected number of headers: "
                     + headerCountExpected);
         }
     }
