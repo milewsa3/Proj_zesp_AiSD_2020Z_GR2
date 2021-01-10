@@ -1,5 +1,10 @@
 package lab.aisd.gui.generator;
 
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import lab.aisd.controller.HospitalInfoController;
 import lab.aisd.gui.util.Scaler;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
@@ -8,6 +13,8 @@ import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.model.PatientIcon;
 import lab.aisd.model.*;
+import lab.aisd.util.FxmlView;
+import lab.aisd.util.StageManager;
 import lab.aisd.util.input.InputData;
 
 import java.util.HashMap;
@@ -63,11 +70,28 @@ public class MapGenerator {
         for (Hospital h : hospitals) {
             HospitalIcon icon = createHospitalIcon(h, iconHeight);
             scaler.scale(icon);
+            setOnMouseClickInfoWindow(h, icon);
 
             result.put(h, icon);
         }
 
         return result;
+    }
+
+    private void setOnMouseClickInfoWindow(Hospital hospital, HospitalIcon hospitalIcon) {
+        hospitalIcon.setOnMouseEntered(event -> {
+            hospitalIcon.getIcon().setOpacity(0.9);
+            hospitalIcon.setStyle("-fx-cursor: hand;");
+        });
+        hospitalIcon.setOnMouseExited(event -> hospitalIcon.getIcon().setOpacity(1));
+
+        hospitalIcon.setOnMouseClicked(event -> {
+            HospitalInfoController controller = StageManager
+                    .getInstance()
+                    .openNewNotFocusedWindowWithGettingController(FxmlView.HOSPITAL_INFO);
+
+            controller.setHospitalInfo(hospital);
+        });
     }
 
     private HospitalIcon createHospitalIcon(Hospital hospital, int iconHeight) {

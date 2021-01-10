@@ -1,5 +1,7 @@
 package lab.aisd.log;
 
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import lab.aisd.animation.DrivingTransition;
 import lab.aisd.animation.FadeInTransition;

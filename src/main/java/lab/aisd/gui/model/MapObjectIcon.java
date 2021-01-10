@@ -41,4 +41,8 @@ public class MapObjectIcon extends StackPane {
                 ", x Translation: " + this.getTranslateX() +
                 ", y Translation: " + this.getTranslateY();
     }
+
+    public ImageView getIcon() {
+        return icon;
+    }
 }

@@ -59,6 +59,17 @@ public enum FxmlView {
             return "log.fxml";
         }
     },
+    HOSPITAL_INFO {
+        @Override
+        public String getTitle() {
+            return "Hospital Info";
+        }
+
+        @Override
+        public String getFxmlFile() {
+            return "hospitalInfo.fxml";
+        }
+    },
     ABOUT {
         @Override
         public String getTitle() {
