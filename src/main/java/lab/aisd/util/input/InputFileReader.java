@@ -63,8 +63,8 @@ public class InputFileReader {
 
         reader.close();
         isCorrectHeaderCount(3, header);
-        if(inputData.getPaths().size() < 0 || inputData.getHospitals().size() < 2){
-            throw new InvalidFileFormatException("");
+        if(inputData.getPaths().size() < 1){
+            throw new InvalidFileFormatException("Not enough paths");
         }
         
         return inputData;
@@ -82,7 +82,7 @@ public class InputFileReader {
             y = Integer.parseInt(scanner.next().trim());
             bedsCount = Integer.parseInt(scanner.next().trim());
             freeBedsCount = Integer.parseInt(scanner.next().trim());
-            if(bedsCount < 0 || freeBedsCount < 0 || bedsCount < freeBedsCount || name.isEmpty()){
+            if(bedsCount < 0 || freeBedsCount < 0 || bedsCount < freeBedsCount || name.trim().isEmpty()){
                 throw new InvalidFileFormatException("");
             }
             
@@ -116,6 +116,10 @@ public class InputFileReader {
             ensureSortedId(nextPathId, id);
             firstHospitalID = Integer.parseInt(scanner.next().trim());
             secondHospitalID = Integer.parseInt(scanner.next().trim());
+            if(firstHospitalID == secondHospitalID){
+                throw new InvalidFileFormatException("");
+            }
+            
             distance = Integer.parseInt(scanner.next().trim());
             if (!isNumberInRange(1, hospitalsCount, firstHospitalID) || !isNumberInRange(1, hospitalsCount, secondHospitalID) || distance < 0) {
                 throw new InvalidFileFormatException("");
