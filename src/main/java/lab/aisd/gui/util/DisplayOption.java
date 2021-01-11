@@ -1,4 +1,4 @@
-package lab.aisd.gui.collection;
+package lab.aisd.gui.util;
 
 public enum DisplayOption {
     ANIMATION, LOGS

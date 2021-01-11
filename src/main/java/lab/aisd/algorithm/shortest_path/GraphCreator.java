@@ -1,10 +1,13 @@
 package lab.aisd.algorithm.shortest_path;
 
+import lab.aisd.algorithm.model.Graph;
+import lab.aisd.algorithm.model.Vertex;
+import lab.aisd.model.Hospital;
+import lab.aisd.model.Path;
+import lab.aisd.util.input.InputData;
+
 import java.util.ArrayList;
 import java.util.List;
-import lab.aisd.algorithm.model.*;
-import lab.aisd.util.input.InputData;
-import lab.aisd.model.*;
 
 public class GraphCreator {
     public Graph createGraph(InputData inputData){

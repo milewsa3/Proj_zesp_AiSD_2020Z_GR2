@@ -1,9 +1,12 @@
 package lab.aisd.algorithm.intersections;
 
+import lab.aisd.model.Coordinate;
+import lab.aisd.model.Hospital;
+import lab.aisd.model.Path;
+import lab.aisd.util.input.InputData;
+
 import java.util.ArrayList;
 import java.util.List;
-import lab.aisd.model.*;
-import lab.aisd.util.input.InputData;
 
 public class IntersectionFinder {
 

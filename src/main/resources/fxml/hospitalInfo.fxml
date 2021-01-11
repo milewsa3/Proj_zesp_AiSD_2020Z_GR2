@@ -34,10 +34,6 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <TextArea fx:id="hospitalInfoTa" editable="false" layoutX="35.0" layoutY="164.0" prefHeight="302.0" prefWidth="331.0" promptText="Hospital info here" wrapText="true">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </TextArea>
+      <TextArea fx:id="hospitalInfoTa" editable="false" layoutX="35.0" layoutY="164.0" prefHeight="302.0" prefWidth="331.0" promptText="Hospital info here" wrapText="true" />
    </children>
 </AnchorPane>

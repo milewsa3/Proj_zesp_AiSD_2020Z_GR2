@@ -5,34 +5,35 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
+import lab.aisd.algorithm.intersections.IntersectionFinder;
+import lab.aisd.algorithm.model.Graph;
 import lab.aisd.algorithm.model.Vertex;
+import lab.aisd.algorithm.shortest_path.FloydWarshall;
+import lab.aisd.algorithm.shortest_path.GraphCreator;
+import lab.aisd.algorithm.shortest_path.NearestHospitalFinder;
 import lab.aisd.animation.FadeInTransition;
-import lab.aisd.gui.collection.Config;
-import lab.aisd.gui.converter.BoarderMarkerImpl;
-import lab.aisd.gui.converter.BorderMarker;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
+import lab.aisd.gui.converter.BoarderMarkerImpl;
+import lab.aisd.gui.converter.BorderMarker;
 import lab.aisd.gui.generator.MapGenerator;
 import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
+import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
-import lab.aisd.gui.util.ConfirmationAlerter;
-import lab.aisd.gui.util.ErrorAlerter;
-import lab.aisd.gui.util.InfoAlerter;
-import lab.aisd.gui.util.OffsetManager;
+import lab.aisd.gui.util.*;
 import lab.aisd.log.*;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
@@ -43,10 +44,6 @@ import lab.aisd.util.input.InputFileReader;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
-
-import lab.aisd.algorithm.intersections.IntersectionFinder;
-import lab.aisd.algorithm.model.Graph;
-import lab.aisd.algorithm.shortest_path.*;
 
 public class MapController implements Initializable {
 
@@ -59,6 +56,8 @@ public class MapController implements Initializable {
 
     private OffsetManager offsetManager;
     private MapGenerator mapGenerator;
+
+    private Config config;
 
 
     @FXML
@@ -108,6 +107,11 @@ public class MapController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(StageManager.getInstance().getStage());
         if (selectedFile == null)
             return;
+
+        if (visualData != null) {
+            ErrorAlerter.showMapAlreadyLoadedError();
+            return;
+        }
 
         try {
             mapData = new InputFileReader().readMainFile(selectedFile.getPath());
@@ -198,10 +202,17 @@ public class MapController implements Initializable {
         if (selectedFile == null)
             return;
 
-        try {
-            if (mapData == null)
-                throw new Exception("Map data must be loaded first");
+        if (patientIconsData != null) {
+            ErrorAlerter.showPatientsAlreadyLoadedError();
+            return;
+        }
 
+        if (mapData == null) {
+            ErrorAlerter.showMapNotLoadedError();
+            return;
+        }
+
+        try {
             patientsData = new InputFileReader().readPatientsFile(selectedFile.getPath());
 
             offsetManager.offset(patientsData);
@@ -242,7 +253,12 @@ public class MapController implements Initializable {
 
     @FXML
     void openConfig(ActionEvent event) {
-        StageManager.getInstance().openNewFocusedWindow(FxmlView.CONFIG);
+        ConfigurationController controller = StageManager
+                .getInstance()
+                .openNewNotFocusedWindowWithGettingController(FxmlView.CONFIG);
+
+        controller.setConfig(config);
+        controller.initialize(null, null);
     }
 
     @FXML
@@ -260,9 +276,25 @@ public class MapController implements Initializable {
             return;
         }
 
+        removeAddingPatientOnDoubleClick();
+        removeShowingInfoOfHospitalOnClick();
         disableStartButton();
-        
+
         startCalculations();
+    }
+
+    private void removeShowingInfoOfHospitalOnClick() {
+        for (Hospital hospital : mapData.getHospitals()) {
+            HospitalIcon icon = visualData.getHospital(hospital);
+
+            if (icon != null) {
+                ImageView image = icon.getIcon();
+
+                image.setOnMouseClicked(null);
+                image.setOnMouseEntered(null);
+                image.setOnMouseExited(null);
+            }
+        }
     }
 
     private void disableStartButton() {
@@ -284,7 +316,7 @@ public class MapController implements Initializable {
 
         Employer employer = new Employer();
         AmbulanceFactory ambulanceFactory = new AmbulanceFactory(mainArea, mainAreaBox, patientIconsData);
-        JobFactory jobFactory = new JobFactory(visualData, patientIconsData);
+        JobFactory jobFactory = new JobFactory(visualData, patientIconsData, config);
 
         Map<Vertex, Hospital> vertexToHospitalMap = new HashMap<>();
         for (int i = 0; i<graph.getNodesNumber(); i++) {
@@ -389,17 +421,26 @@ public class MapController implements Initializable {
         }
 
         Job showLogs = new Job(() -> {
-            StageManager.getInstance().openNewNotFocusedWindow(FxmlView.LOG);
-            Logger.getInstance().add(employer.getAllLogs());
+            LogController controller = StageManager
+                    .getInstance()
+                    .openNewNotFocusedWindowWithGettingController(FxmlView.LOG);
+
+            Logger logger = new Logger();
+            logger.add(employer.getAllLogs());
+            controller.setLogs(logger.getListOfLogs());
         });
 
-        switch (Config.getInstance().getDisplayOption()) {
+        switch (config.getDisplayOption()) {
             case ANIMATION -> {
                 employer.add(showLogs);
                 employer.startJobs();
             }
             case LOGS -> showLogs.commit();
         }
+    }
+
+    private void removeAddingPatientOnDoubleClick() {
+        mainArea.setOnMouseClicked(null);
     }
 
     private boolean isDataValid() {
@@ -422,42 +463,38 @@ public class MapController implements Initializable {
         offsetManager = new OffsetManager();
 
         mapGenerator = new MapGenerator((int)mainArea.getPrefWidth(), (int)mainArea.getPrefHeight());
-        /*mainArea.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
+        config = new Config();
     }
 
     private void initAddingPatientsOnDoubleClick() {
-        mainArea.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    if(mouseEvent.getClickCount() == 2) {
-                        if (!isMapLoaded()) {
-                            ErrorAlerter.showMapNotLoadedError();
-                        } else {
-                            if (patientIconsData == null)
-                                return;
+        mainArea.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2) {
+                    if (!isMapLoaded()) {
+                        ErrorAlerter.showMapNotLoadedError();
+                    } else {
+                        if (patientIconsData == null)
+                            return;
 
-                            PatientGenerator pg = new PatientGenerator(
-                                    (int)mouseEvent.getX(),
-                                    (int)mouseEvent.getY(),
-                                    mapGenerator.getScaler(),
-                                    patientsData.size(),
-                                    patientIconsData.size() + 1
-                            );
+                        PatientGenerator pg = new PatientGenerator(
+                                (int)mouseEvent.getX(),
+                                (int)mouseEvent.getY(),
+                                mapGenerator.getScaler(),
+                                patientsData.size(),
+                                patientIconsData.size() + 1
+                        );
 
-                            pg.generate();
+                        pg.generate();
 
-                            if (!borderMarker.isWithinBorder(pg.getPatient())) {
-                                ErrorAlerter.showPatientNotWithinBorderError();
+                        if (!borderMarker.isWithinBorder(pg.getPatient())) {
+                            ErrorAlerter.showPatientNotWithinBorderError();
 
-                                return;
-                            }
-
-                            patientsData.add(pg.getPatient());
-                            patientIconsData.addPatient(pg.getPatient(), pg.getPatientIcon());
-                            addObjectToTheMap(pg.getPatientIcon());
+                            return;
                         }
+
+                        patientsData.add(pg.getPatient());
+                        patientIconsData.addPatient(pg.getPatient(), pg.getPatientIcon());
+                        addObjectToTheMap(pg.getPatientIcon());
                     }
                 }
             }

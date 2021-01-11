@@ -1,7 +1,7 @@
 package lab.aisd.util.input;
 
-import lab.aisd.model.Hospital;
 import lab.aisd.model.Building;
+import lab.aisd.model.Hospital;
 import lab.aisd.model.Path;
 
 import java.util.ArrayList;

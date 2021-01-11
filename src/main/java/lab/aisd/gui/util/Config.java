@@ -1,40 +1,34 @@
-package lab.aisd.gui.collection;
+package lab.aisd.gui.util;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import lab.aisd.log.Job;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 public class Config {
-    private static Config instance;
-
     private final double DEFAULT_SPEED = 500;
-    private double speedScale = 1.0;
+    private DoubleProperty speedScale;
 
     private String displayOption;
 
-    private Config() {
+    public Config() {
         displayOption = "Animation";
-    }
-
-    public static Config getInstance() {
-        if (instance == null)
-            instance = new Config();
-
-        return instance;
+        speedScale = new SimpleDoubleProperty(1.0);
     }
 
     public void setSpeedScale(double speedScale) {
         if (speedScale > 0 && speedScale < 2)
-            this.speedScale = speedScale;
+            this.speedScale.set(speedScale);
     }
 
     public double getSpeedScale() {
+        return speedScale.get();
+    }
+
+    public DoubleProperty speedScaleProperty() {
         return speedScale;
     }
 
     public double getSpeed() {
-        return DEFAULT_SPEED / speedScale;
+        return DEFAULT_SPEED / speedScale.getValue();
     }
 
     public String getDisplayOptionString() {
@@ -55,5 +49,14 @@ public class Config {
 
     public void setDisplayOption(String displayOption) {
         this.displayOption = displayOption;
+    }
+
+    @Override
+    public String toString() {
+        return "Config{" +
+                "DEFAULT_SPEED=" + DEFAULT_SPEED +
+                ", speedScale=" + speedScale +
+                ", displayOption='" + displayOption + '\'' +
+                '}';
     }
 }

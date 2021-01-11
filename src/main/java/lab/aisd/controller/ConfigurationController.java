@@ -1,21 +1,18 @@
 package lab.aisd.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import lab.aisd.gui.collection.Config;
-import lab.aisd.log.Job;
+import lab.aisd.gui.util.Config;
+import lab.aisd.gui.util.DisplayOption;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ConfigurationController implements Initializable {
-    private Config config = Config.getInstance();
+    private Config config;
 
     @FXML
     private RadioButton animationRb;
@@ -29,25 +26,46 @@ public class ConfigurationController implements Initializable {
     @FXML
     private Slider speedSlider;
 
+    public void setConfig(Config config) {
+        this.config = config;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initSpeedSlider();
         initConfig();
+        initDisplayOpt();
+    }
+
+    private boolean isConfigInitialized() {
+        return config != null;
+    }
+
+    private void initDisplayOpt() {
+        if (!isConfigInitialized())
+            return;
+
+        if (config.getDisplayOption() == DisplayOption.ANIMATION)
+            animationRb.setSelected(true);
+        else {
+            logsRb.setSelected(true);
+        }
     }
 
     private void initConfig() {
+        if (!isConfigInitialized())
+            return;
+
         displayOpt.selectedToggleProperty().addListener((observable, oldValue, newValue) ->
-                Config.getInstance().setDisplayOption(((RadioButton) newValue).getText()));
+                config.setDisplayOption(((RadioButton) newValue).getText()));
     }
 
     private void initSpeedSlider() {
-        speedSlider.setValue(Config.getInstance().getSpeedScale());
+        if (!isConfigInitialized())
+            return;
 
-        speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Config.getInstance().setSpeedScale(newValue.doubleValue());
-            }
-        });
+        speedSlider.setValue(config.getSpeedScale());
+
+        config.speedScaleProperty().bind(speedSlider.valueProperty());
     }
 }

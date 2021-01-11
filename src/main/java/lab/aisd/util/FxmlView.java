@@ -1,7 +1,5 @@
 package lab.aisd.util;
 
-import java.util.ResourceBundle;
-
 public enum FxmlView {
 
     MENU {

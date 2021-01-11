@@ -20,6 +20,14 @@ public class ErrorAlerter {
                 "To load patient, you have to load map first");
     }
 
+    public static void showMapAlreadyLoadedError() {
+        showErrorAlertScene("Loading error", "Map is already loaded!");
+    }
+
+    public static void showPatientsAlreadyLoadedError() {
+        showErrorAlertScene("Loading error", "Patients are already loaded!");
+    }
+
     public static void showPatientNotWithinBorderError() {
         showErrorAlertScene("Adding error", "Patient must be located within the border!");
     }

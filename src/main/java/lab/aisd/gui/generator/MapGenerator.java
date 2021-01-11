@@ -1,17 +1,13 @@
 package lab.aisd.gui.generator;
 
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import lab.aisd.controller.HospitalInfoController;
-import lab.aisd.gui.util.Scaler;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.model.BuildingIcon;
 import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.model.PatientIcon;
+import lab.aisd.gui.util.Scaler;
 import lab.aisd.model.*;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;

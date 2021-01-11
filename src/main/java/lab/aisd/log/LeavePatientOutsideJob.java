@@ -1,12 +1,11 @@
 package lab.aisd.log;
 
-import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 import lab.aisd.animation.FadeInTransition;
 import lab.aisd.animation.FadeOutTransition;
 import lab.aisd.animation.Rotate360Transition;
-import lab.aisd.gui.collection.Config;
 import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.util.Config;
 import lab.aisd.model.Patient;
 
 public class LeavePatientOutsideJob extends Job {
@@ -14,14 +13,14 @@ public class LeavePatientOutsideJob extends Job {
         super();
     }
 
-    public LeavePatientOutsideJob(MapObjectIcon ambulance) {
+    public LeavePatientOutsideJob(MapObjectIcon ambulance, Config config) {
         this();
-        setAction(ambulance);
+        setAction(ambulance, config);
     }
 
-    public void setAction(MapObjectIcon ambulance) {
+    public void setAction(MapObjectIcon ambulance, Config config) {
         Action action = () -> {
-            double speed = Config.getInstance().getSpeed();
+            double speed = config.getSpeed();
 
             FadeInTransition fadeIn = new FadeInTransition(Duration.millis(speed), ambulance);
             Rotate360Transition rotate = new Rotate360Transition(Duration.millis(speed), ambulance);

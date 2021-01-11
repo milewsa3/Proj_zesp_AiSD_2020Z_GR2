@@ -1,6 +1,5 @@
 package lab.aisd.animation;
 
-import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

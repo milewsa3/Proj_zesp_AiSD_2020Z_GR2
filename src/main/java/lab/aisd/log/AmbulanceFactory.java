@@ -1,8 +1,6 @@
 package lab.aisd.log;
 
 
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.model.AmbulanceIcon;

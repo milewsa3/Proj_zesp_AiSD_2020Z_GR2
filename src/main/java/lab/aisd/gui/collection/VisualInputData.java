@@ -6,7 +6,9 @@ import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.model.Building;
 import lab.aisd.model.Hospital;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class VisualInputData implements Iterable<MapObjectIcon>{
     private Map<Hospital, HospitalIcon> hospitals;

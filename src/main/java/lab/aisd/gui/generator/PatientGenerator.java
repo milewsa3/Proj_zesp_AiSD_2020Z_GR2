@@ -1,7 +1,7 @@
 package lab.aisd.gui.generator;
 
-import lab.aisd.gui.util.Scaler;
 import lab.aisd.gui.model.PatientIcon;
+import lab.aisd.gui.util.Scaler;
 import lab.aisd.model.Coordinate;
 import lab.aisd.model.Patient;
 

@@ -3,8 +3,8 @@ package lab.aisd.log;
 import javafx.util.Duration;
 import lab.aisd.animation.FadeInTransition;
 import lab.aisd.animation.FadeOutTransition;
-import lab.aisd.gui.collection.Config;
 import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.util.Config;
 import lab.aisd.model.Patient;
 
 public class LeavePatientInHospitalJob extends Job {
@@ -13,14 +13,14 @@ public class LeavePatientInHospitalJob extends Job {
         super();
     }
 
-    public LeavePatientInHospitalJob(MapObjectIcon ambulance) {
+    public LeavePatientInHospitalJob(MapObjectIcon ambulance, Config config) {
         this();
-        setAction(ambulance);
+        setAction(ambulance, config);
     }
 
-    public void setAction(MapObjectIcon ambulance) {
+    public void setAction(MapObjectIcon ambulance, Config config) {
         Action action = () -> {
-            double speed = Config.getInstance().getSpeed();
+            double speed = config.getSpeed();
 
             FadeInTransition fadeIn1 = new FadeInTransition(Duration.millis(speed), ambulance);
             FadeOutTransition fadeOut1 = new FadeOutTransition(Duration.millis(speed), ambulance);
