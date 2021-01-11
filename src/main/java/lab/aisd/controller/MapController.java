@@ -348,11 +348,10 @@ public class MapController implements Initializable {
             Job driveToFirstHospital = jobFactory.createPatientTransportJob(ambulance, patient, nearestHospital);
             employer.add(driveToFirstHospital);
 
-            if (nearestHospital.areThereFreeBeds()) {
+            if (nearestHospitalVertex.areThereFreeBeds()) {
                 Job leavePatient = jobFactory.createLeavePatientInHospitalJob(ambulance, patient);
                 employer.add(leavePatient);
-                nearestHospital.decrementFreeBedsBy(1);
-
+                nearestHospitalVertex.decrementFreeBedsBy(1);
                 continue;
             }
 
