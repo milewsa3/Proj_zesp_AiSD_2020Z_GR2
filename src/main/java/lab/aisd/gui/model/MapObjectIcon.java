@@ -25,8 +25,6 @@ public class MapObjectIcon extends StackPane {
         icon.setPreserveRatio(true);
         icon.fitHeightProperty().bind(this.prefHeightProperty());
 
-        /*this.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));*/
         getChildren().add(icon);
     }
 

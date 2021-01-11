@@ -33,7 +33,20 @@ public class LogController implements Initializable {
             result.append('\n');
         }
 
-        logTextArea.setText(result.toString());
+        Thread thread = new Thread(() -> {
+            char[] chars = result.toString().toCharArray();
+
+            for (char c : chars) {
+                logTextArea.setText(logTextArea.getText() + c);
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+
+        thread.start();
     }
 
     @FXML
