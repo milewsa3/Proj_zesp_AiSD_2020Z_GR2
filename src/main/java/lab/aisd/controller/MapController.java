@@ -116,6 +116,10 @@ public class MapController implements Initializable {
         try {
             mapData = new InputFileReader().readMainFile(selectedFile.getPath());
 
+            if (mapData.getHospitals().size() > 500 || mapData.getBuildings().size() > 500) {
+                throw new Exception("Limit for number of hospitals and buildings: 500");
+            }
+
             offsetManager.offset(mapData);
 
             visualData = mapGenerator.generate(mapData);
