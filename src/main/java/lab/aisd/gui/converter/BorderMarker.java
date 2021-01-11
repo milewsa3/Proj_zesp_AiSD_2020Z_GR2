@@ -1,7 +1,6 @@
 package lab.aisd.gui.converter;
 
 import lab.aisd.model.MapObject;
-import lab.aisd.util.input.InputData;
 
 import java.util.List;
 

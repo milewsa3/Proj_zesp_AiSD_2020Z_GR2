@@ -2,12 +2,10 @@ package lab.aisd.log;
 
 import javafx.util.Duration;
 import lab.aisd.animation.DrivingTransition;
-import lab.aisd.animation.FadeInTransition;
 import lab.aisd.animation.FadeOutTransition;
-import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.util.Config;
 import lab.aisd.gui.util.OffsetManager;
-import lab.aisd.model.Hospital;
 import lab.aisd.model.Patient;
 
 public class PickUpPatientJob extends Job{
@@ -16,14 +14,14 @@ public class PickUpPatientJob extends Job{
         super();
     }
 
-    public PickUpPatientJob(MapObjectIcon ambulance, MapObjectIcon patient) {
+    public PickUpPatientJob(MapObjectIcon ambulance, MapObjectIcon patient, Config config) {
         this();
-        setAction(ambulance, patient);
+        setAction(ambulance, patient, config);
     }
 
-    public void setAction(MapObjectIcon ambulance, MapObjectIcon patient) {
+    public void setAction(MapObjectIcon ambulance, MapObjectIcon patient, Config config) {
         Action action = () -> {
-            double speed = Job.getSpeed();
+            double speed = config.getSpeed();
 
             DrivingTransition drive = new DrivingTransition(Duration.millis(speed * 2), ambulance, ambulance, patient);
             FadeOutTransition fadeOutPatient = new FadeOutTransition(Duration.millis(speed), patient);

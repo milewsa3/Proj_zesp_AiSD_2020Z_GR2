@@ -71,6 +71,16 @@ public class Scaler {
             unscale(n);
     }
 
+    public void unscale(Coordinate coordinate) {
+        checkIfRatiosCalculated();
+
+        double oldX = coordinate.getX();
+        double oldY = coordinate.getY();
+
+        coordinate.setX((int)(oldX / widthRatio));
+        coordinate.setY((int)(oldY / heightRatio));
+    }
+
     public int getHospitalHeight(int numOfObjs) {
         if (numOfObjs < 10)
             return 80;
@@ -87,7 +97,7 @@ public class Scaler {
     }
 
     public int getPatientHeight(int numOfObjs) {
-        return getHospitalHeight(numOfObjs) - 6;
+        return getHospitalHeight(numOfObjs) - 10;
     }
 
     public double getWidthRatio() {

@@ -4,16 +4,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lab.aisd.Main;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Manages switching Scenes on the Primary Stage
@@ -57,6 +53,22 @@ public class StageManager {
         window.setTitle(view.getTitle());
         window.setScene(scene);
         window.show();
+    }
+
+    public <T> T openNewNotFocusedWindowWithGettingController(final FxmlView view) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + view.getFxmlFile()));
+            Parent viewRootNodeHierarchy = loader.load();
+            Stage window = new Stage();
+            Scene scene = new Scene(viewRootNodeHierarchy);
+            window.setTitle(view.getTitle());
+            window.setScene(scene);
+            window.show();
+
+            return loader.getController();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void switchScene(final FxmlView view) {

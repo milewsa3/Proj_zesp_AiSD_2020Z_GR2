@@ -1,15 +1,11 @@
 package lab.aisd.animation;
 
-import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.util.Duration;
 import lab.aisd.gui.model.MapObjectIcon;
-import lab.aisd.model.MapObject;
-
-import java.util.Random;
 
 public class DrivingTransition {
     private TranslateTransition tt;

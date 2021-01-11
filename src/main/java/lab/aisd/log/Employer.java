@@ -1,6 +1,9 @@
 package lab.aisd.log;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Employer {
     private Deque<Job> jobs;
@@ -17,10 +20,14 @@ public class Employer {
         jobs.addLast(job);
     }
 
-    public void add(Job ... jobs) {
+    public void addAll(Job ... jobs) {
         for (Job j : jobs) {
             add(j);
         }
+    }
+
+    public void clear() {
+        jobs.clear();
     }
 
     public void startJobs() {
@@ -32,7 +39,11 @@ public class Employer {
         List<String> logs = new ArrayList<>();
 
         for (Job job : jobs) {
-            logs.add(job.getDescription());
+            String description = job.getDescription();
+
+            if (description.compareTo("Not described") != 0) {
+                logs.add(description);
+            }
         }
 
         return logs;

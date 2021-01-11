@@ -2,8 +2,7 @@ package lab.aisd.gui.model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
 
 
 public class MapObjectIcon extends StackPane {
@@ -40,5 +39,9 @@ public class MapObjectIcon extends StackPane {
                 ", y Layout: " + this.getLayoutY() +
                 ", x Translation: " + this.getTranslateX() +
                 ", y Translation: " + this.getTranslateY();
+    }
+
+    public ImageView getIcon() {
+        return icon;
     }
 }

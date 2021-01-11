@@ -1,23 +1,20 @@
 package lab.aisd.controller;
 
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import lab.aisd.gui.util.ErrorAlerter;
 import lab.aisd.log.Log;
-import lab.aisd.log.Logger;
-import lab.aisd.util.StageManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class LogController implements Initializable {
@@ -27,6 +24,17 @@ public class LogController implements Initializable {
 
     @FXML
     private Button saveBt;
+
+    public void setLogs(List<Log> logs) {
+        StringBuilder result = new StringBuilder();
+
+        for (Log l : logs) {
+            result.append(l);
+            result.append('\n');
+        }
+
+        logTextArea.setText(result.toString());
+    }
 
     @FXML
     void saveLogs(ActionEvent event) {
@@ -52,15 +60,5 @@ public class LogController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Logger.getInstance().getListOfLogs().addListener(new ListChangeListener<Log>() {
-            @Override
-            public void onChanged(Change<? extends Log> c) {
-                while (c.next()) {
-                    for (Log l : c.getAddedSubList()) {
-                        logTextArea.setText(logTextArea.getText() + l + '\n');
-                    }
-                }
-            }
-        });
     }
 }

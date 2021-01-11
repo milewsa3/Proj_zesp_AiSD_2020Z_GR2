@@ -1,7 +1,8 @@
 package lab.aisd.model;
 
-import static java.lang.Math.abs;
 import java.util.Objects;
+
+import static java.lang.Math.abs;
 
 public class Coordinate implements Comparable<Coordinate> {
     private int x;

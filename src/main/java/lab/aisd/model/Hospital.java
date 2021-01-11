@@ -41,17 +41,36 @@ public class Hospital extends MapObject {
         this.freeBedsCount = freeBedsCount;
     }
 
+    public boolean areThereFreeBeds() {
+        return  freeBedsCount > 0;
+    }
+
+    public void decrementFreeBedsBy(int value) {
+        freeBedsCount -= value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Hospital hospital = (Hospital) o;
-        return bedsCount == hospital.bedsCount && freeBedsCount == hospital.freeBedsCount && name.equals(hospital.name);
+        return bedsCount == hospital.bedsCount && name.equals(hospital.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, bedsCount, freeBedsCount);
+        return Objects.hash(super.hashCode(), name, bedsCount);
+    }
+
+    @Override
+    public String toString() {
+        return "Hospital{" +
+                "name='" + name + '\'' +
+                ", bedsCount=" + bedsCount +
+                ", freeBedsCount=" + freeBedsCount +
+                ", id=" + id +
+                ", position=" + position +
+                '}';
     }
 }

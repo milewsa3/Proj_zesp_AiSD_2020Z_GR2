@@ -1,7 +1,5 @@
 package lab.aisd.gui.util;
 
-import lab.aisd.animation.DrivingTransition;
-import lab.aisd.gui.model.AmbulanceIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.model.*;
 import lab.aisd.util.input.InputData;

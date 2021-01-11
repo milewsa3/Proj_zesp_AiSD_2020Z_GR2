@@ -1,16 +1,16 @@
 package lab.aisd.gui.generator;
 
-import lab.aisd.gui.util.Scaler;
+import lab.aisd.controller.HospitalInfoController;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.model.BuildingIcon;
 import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
 import lab.aisd.gui.model.PatientIcon;
-import lab.aisd.model.Building;
-import lab.aisd.model.Coordinate;
-import lab.aisd.model.Hospital;
-import lab.aisd.model.Patient;
+import lab.aisd.gui.util.Scaler;
+import lab.aisd.model.*;
+import lab.aisd.util.FxmlView;
+import lab.aisd.util.StageManager;
 import lab.aisd.util.input.InputData;
 
 import java.util.HashMap;
@@ -66,6 +66,7 @@ public class MapGenerator {
         for (Hospital h : hospitals) {
             HospitalIcon icon = createHospitalIcon(h, iconHeight);
             scaler.scale(icon);
+            setOnMouseClickInfoWindow(h, icon);
 
             result.put(h, icon);
         }
@@ -73,11 +74,36 @@ public class MapGenerator {
         return result;
     }
 
+    private void setOnMouseClickInfoWindow(Hospital hospital, HospitalIcon hospitalIcon) {
+        hospitalIcon.setOnMouseEntered(event -> {
+            hospitalIcon.getIcon().setOpacity(0.9);
+            hospitalIcon.setStyle("-fx-cursor: hand;");
+        });
+        hospitalIcon.setOnMouseExited(event -> hospitalIcon.getIcon().setOpacity(1));
+
+        hospitalIcon.setOnMouseClicked(event -> {
+            HospitalInfoController controller = StageManager
+                    .getInstance()
+                    .openNewNotFocusedWindowWithGettingController(FxmlView.HOSPITAL_INFO);
+
+            controller.setHospitalInfo(hospital);
+        });
+    }
+
     private HospitalIcon createHospitalIcon(Hospital hospital, int iconHeight) {
         Coordinate position = hospital.getPosition();
         HospitalIcon icon = new HospitalIcon(position.getX(), position.getY());
         icon.setPrefHeight(iconHeight);
         positionIconToBeInTheCenterOfPoint(icon);
+
+        return icon;
+    }
+
+    public MapObjectIcon createScaledCrossingIcon(MapObject crossing) {
+        Coordinate position = crossing.getPosition();
+        MapObjectIcon icon = new MapObjectIcon(position.getX(), position.getY());
+        positionIconToBeInTheCenterOfPoint(icon);
+        scaler.scale(icon);
 
         return icon;
     }

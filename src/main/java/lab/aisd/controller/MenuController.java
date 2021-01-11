@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import lab.aisd.Main;
 import lab.aisd.util.FxmlView;
 import lab.aisd.util.StageManager;
 

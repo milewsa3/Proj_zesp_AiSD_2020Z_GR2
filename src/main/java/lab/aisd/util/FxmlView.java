@@ -1,7 +1,5 @@
 package lab.aisd.util;
 
-import java.util.ResourceBundle;
-
 public enum FxmlView {
 
     MENU {
@@ -57,6 +55,17 @@ public enum FxmlView {
         @Override
         public String getFxmlFile() {
             return "log.fxml";
+        }
+    },
+    HOSPITAL_INFO {
+        @Override
+        public String getTitle() {
+            return "Hospital Info";
+        }
+
+        @Override
+        public String getFxmlFile() {
+            return "hospitalInfo.fxml";
         }
     },
     ABOUT {

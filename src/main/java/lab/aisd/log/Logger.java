@@ -1,19 +1,18 @@
 package lab.aisd.log;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class Logger {
-    private final ObservableList<Log> logs = FXCollections.observableArrayList();
-    private static Logger instance;
+    private List<Log> logs;
+    private int numberOfLogs = 0;
 
-    private Logger () {
+    public Logger () {
+        logs = new ArrayList<>();
     }
 
     public void add(String message) {
-        logs.add(new Log(message));
+        logs.add(new Log(message, ++numberOfLogs));
     }
 
     public void add(Log log) {
@@ -38,14 +37,7 @@ public class Logger {
         }
     }
 
-    public ObservableList<Log> getListOfLogs() {
+    public List<Log> getListOfLogs() {
         return logs;
-    }
-
-    public static Logger getInstance() {
-        if (instance == null)
-            instance = new Logger();
-
-        return instance;
     }
 }
