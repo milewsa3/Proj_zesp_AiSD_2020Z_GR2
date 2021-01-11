@@ -24,6 +24,7 @@ import lab.aisd.algorithm.shortest_path.FloydWarshall;
 import lab.aisd.algorithm.shortest_path.GraphCreator;
 import lab.aisd.algorithm.shortest_path.NearestHospitalFinder;
 import lab.aisd.animation.FadeInTransition;
+import lab.aisd.animation.FadeOutTransition;
 import lab.aisd.gui.collection.PatientIconsCollection;
 import lab.aisd.gui.collection.VisualInputData;
 import lab.aisd.gui.converter.BoarderMarkerImpl;
@@ -33,6 +34,7 @@ import lab.aisd.gui.generator.PathCreator;
 import lab.aisd.gui.generator.PatientGenerator;
 import lab.aisd.gui.model.HospitalIcon;
 import lab.aisd.gui.model.MapObjectIcon;
+import lab.aisd.gui.model.PatientIcon;
 import lab.aisd.gui.util.*;
 import lab.aisd.log.*;
 import lab.aisd.model.*;
@@ -97,8 +99,20 @@ public class MapController implements Initializable {
     private HBox mainAreaBox;
 
     @FXML
-    void delete(ActionEvent event) {
+    void deleteLastPatient(ActionEvent event) {
+        if (!isPatientsLoaded())
+            return;
 
+        if (patientsData.size() == 0)
+            return;
+
+        Patient lastPatient = patientsData.get(patientsData.size() - 1);
+        PatientIcon lastPatientIcon = patientIconsData.getPatient(lastPatient);
+
+        patientIconsData.getPatients().remove(lastPatient);
+        patientsData.remove(lastPatient);
+
+        removeObjectFromMap(lastPatientIcon);
     }
 
     @FXML
@@ -238,6 +252,13 @@ public class MapController implements Initializable {
 
         mainArea.getChildren().add(node);
         ft.play();
+    }
+
+    private void removeObjectFromMap(Node node) {
+        FadeOutTransition fo = new FadeOutTransition(node);
+
+        fo.setOnFinished(event -> mainArea.getChildren().remove(node));
+        fo.play();
     }
 
     @FXML

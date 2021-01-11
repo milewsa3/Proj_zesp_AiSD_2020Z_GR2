@@ -23,13 +23,12 @@
                   <MenuItem fx:id="newMenuIt" mnemonicParsing="false" onAction="#newMap" text="New" />
                   <MenuItem fx:id="loadMapMenuIt" mnemonicParsing="false" onAction="#loadMap" text="Load map" />
                   <MenuItem fx:id="loadPatientsMenuIt" mnemonicParsing="false" onAction="#loadPatients" text="Load patients" />
-                  <MenuItem mnemonicParsing="false" text="Save " />
               <MenuItem fx:id="closeMenuIt" mnemonicParsing="false" onAction="#close" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem fx:id="deleteMenuIt" mnemonicParsing="false" onAction="#delete" text="Delete" />
+              <MenuItem fx:id="deleteMenuIt" mnemonicParsing="false" onAction="#deleteLastPatient" text="Delete" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
