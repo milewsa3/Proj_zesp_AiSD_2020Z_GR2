@@ -75,13 +75,13 @@ public class MapGenerator {
     }
 
     private void setOnMouseClickInfoWindow(Hospital hospital, HospitalIcon hospitalIcon) {
-        hospitalIcon.setOnMouseEntered(event -> {
+        hospitalIcon.getIcon().setOnMouseEntered(event -> {
             hospitalIcon.getIcon().setOpacity(0.9);
-            hospitalIcon.setStyle("-fx-cursor: hand;");
+            hospitalIcon.getIcon().setStyle("-fx-cursor: hand;");
         });
-        hospitalIcon.setOnMouseExited(event -> hospitalIcon.getIcon().setOpacity(1));
+        hospitalIcon.getIcon().setOnMouseExited(event -> hospitalIcon.getIcon().setOpacity(1));
 
-        hospitalIcon.setOnMouseClicked(event -> {
+        hospitalIcon.getIcon().setOnMouseClicked(event -> {
             HospitalInfoController controller = StageManager
                     .getInstance()
                     .openNewNotFocusedWindowWithGettingController(FxmlView.HOSPITAL_INFO);

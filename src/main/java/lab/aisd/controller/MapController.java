@@ -316,7 +316,7 @@ public class MapController implements Initializable {
                 ImageView image = icon.getIcon();
 
                 image.setOnMouseClicked(null);
-                image.setOnMouseEntered(null);
+                image.setOnMouseEntered(event -> image.setStyle("-fx-cursor:pointer;"));
                 image.setOnMouseExited(null);
             }
         }
@@ -494,6 +494,7 @@ public class MapController implements Initializable {
         mainArea.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                 if(mouseEvent.getClickCount() == 2) {
+                    System.out.println("CLICKED");
                     if (!isMapLoaded()) {
                         ErrorAlerter.showMapNotLoadedError();
                     } else {
