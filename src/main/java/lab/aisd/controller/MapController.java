@@ -351,6 +351,10 @@ public class MapController implements Initializable {
         for (Patient patient : patientsData) {
             fw.resetVisitedNodes();
 
+            if (!borderMarker.isWithinBorder(patient)) {
+                continue;
+            }
+
             MapObjectIcon ambulance = ambulanceFactory.createAmbulanceForPatient(patient);
             Job createAmbulance = new Job();
             createAmbulance.setAction(() -> {
