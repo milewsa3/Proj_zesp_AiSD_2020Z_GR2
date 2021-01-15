@@ -103,6 +103,8 @@ public class ConvexHull {
     }
 
     public boolean isPointWithinTheBorder(Coordinate point) {
+        if (points.size() < 3)
+            return false;
         point = point.minus(p0);
         if (hull.get(0).cross(point) != 0 && sgn(hull.get(0).cross(point)) != sgn(hull.get(0).cross(hull.get(n - 1))))
             return false;
