@@ -26,27 +26,19 @@ public class LogController implements Initializable {
     private Button saveBt;
 
     public void setLogs(List<Log> logs) {
-        StringBuilder result = new StringBuilder();
+        Thread showLogs = new Thread(() -> {
+            for (Log l : logs) {
+                logTextArea.setText(logTextArea.getText() + l + '\n');
 
-        for (Log l : logs) {
-            result.append(l);
-            result.append('\n');
-        }
-
-        Thread thread = new Thread(() -> {
-            char[] chars = result.toString().toCharArray();
-
-            for (char c : chars) {
-                logTextArea.setText(logTextArea.getText() + c);
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     break;
                 }
             }
         });
 
-        thread.start();
+        showLogs.start();
     }
 
     @FXML
