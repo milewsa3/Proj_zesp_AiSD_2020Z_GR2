@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import lab.aisd.algorithm.intersections.IntersectionFinder;
 import lab.aisd.algorithm.model.Graph;
@@ -488,8 +489,9 @@ public class MapController implements Initializable {
         StageManager.getInstance().setResizable(true);
         initAddingPatientsOnDoubleClick();
         initMousePositionLabel();
-        offsetManager = new OffsetManager();
+        initClipping();
 
+        offsetManager = new OffsetManager();
         mapGenerator = new MapGenerator((int)mainArea.getPrefWidth(), (int)mainArea.getPrefHeight());
         config = new Config();
     }
@@ -546,5 +548,12 @@ public class MapController implements Initializable {
         });
 
         mainArea.setOnMouseExited(event -> mousePosLb.setText("Exited"));
+    }
+
+    private void initClipping() {
+        Rectangle clipRect = new Rectangle(mainAreaBox.getWidth(), mainAreaBox.getHeight());
+        clipRect.heightProperty().bind(mainAreaBox.heightProperty());
+        clipRect.widthProperty().bind(mainAreaBox.widthProperty());
+        mainAreaBox.setClip(clipRect);
     }
 }
