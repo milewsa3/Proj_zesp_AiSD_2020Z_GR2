@@ -498,7 +498,6 @@ public class MapController implements Initializable {
         mainArea.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                 if(mouseEvent.getClickCount() == 2) {
-                    System.out.println("CLICKED");
                     if (!isMapLoaded()) {
                         ErrorAlerter.showMapNotLoadedError();
                     } else {
@@ -531,29 +530,21 @@ public class MapController implements Initializable {
     }
 
     private void initMousePositionLabel() {
-        mainArea.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (mapGenerator == null ||
-                        mapGenerator.getScaler() == null ||
-                        !mapGenerator.getScaler().areRatiosCalculated())
-                    return;
+        mainArea.setOnMouseMoved(event -> {
+            if (mapGenerator == null ||
+                    mapGenerator.getScaler() == null ||
+                    !mapGenerator.getScaler().areRatiosCalculated())
+                return;
 
-                double x = event.getX();
-                double y = event.getY();
-                Coordinate coords = new Coordinate((int)x,(int)y);
+            double x = event.getX();
+            double y = event.getY();
+            Coordinate coords = new Coordinate((int)x,(int)y);
 
-                mapGenerator.getScaler().unscale(coords);
+            mapGenerator.getScaler().unscale(coords);
 
-                mousePosLb.setText("x: " + coords.getX() + ", y: " + coords.getY());
-            }
+            mousePosLb.setText("x: " + coords.getX() + ", y: " + coords.getY());
         });
 
-        mainArea.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                mousePosLb.setText("Exited");
-            }
-        });
+        mainArea.setOnMouseExited(event -> mousePosLb.setText("Exited"));
     }
 }
